@@ -11,7 +11,7 @@ datapath = "data/.csv"
 data = pd.read_csv(datapath)
 
 
-def df_pka(file : str, sep_ : str = ";", skiprows_ : int | Sequence[int] | bool = False, skipblanklines_ : bool = True) -> pd.DataFrame:
+def SmilesDataFrame(file : str, sep_ : str = ";", skiprows_ : int | Sequence[int] | bool = False, skipblanklines_ : bool = True) -> pd.DataFrame:
     """
     This function will create the dataframe thanks to the file given.
     It will be then used in further functions.    
@@ -34,7 +34,31 @@ def df_pka(file : str, sep_ : str = ";", skiprows_ : int | Sequence[int] | bool 
     return df
 
 
-def find_pka_gaps(df : pd.DataFrame, nb : int = 1) -> dict[float, tuple[int, int]]:
+def givesDataFrame(file : str, sep_ : str = ";", skiprows_ : int | Sequence[int] | bool = False, skipblanklines_ : bool = True) -> pd.DataFrame:
+    """
+    """
+
+    df_smiles = df_smiles(file, sep_, skiprows_, skipblanklines_)
+    df_smiles.iloc[0:0,:]= df_smiles.iloc[0:0,:].apply(Chem.MolToSmiles(Chem.MolFromSmiles()))
+
+    dic_for_df = {
+        "name" : [],
+        "cid" : [],
+        "smiles" : [],
+        "pKa" : [],
+        "logP" : []
+    }
+
+    for i in range(len(df_smiles)):
+        props = getMoleculeInfoFromSmiles(df_smiles.iloc[0,i])
+        for p in ["name", "cid", "smiles", "pKa", "logP"]:
+            dic_for_df[p].append(props[p])
+    
+    return pd.DataFrame(dic_for_df)
+
+            
+
+def findpKaGaps(df : pd.DataFrame, nb : int = 1) -> dict[float, tuple[int, int]]:
     """
     A function used to find the biggest pka gaps of a dataframe. 
     It will give by defalt the biggest gap, but one can precise how many he wants.
@@ -56,7 +80,7 @@ def find_pka_gaps(df : pd.DataFrame, nb : int = 1) -> dict[float, tuple[int, int
     return maxs_dic
 
     
-def find_acid_or_base(pka : float = m.inf, smiles : str = "", logP : float = m.inf, nu : str = "") -> pd.DataFrame:
+def findAcidOrBase(pka : float = m.inf, smiles : str = "", logP : float = m.inf, nu : str = "") -> pd.DataFrame:
     """
     Gives a specific acid based on Smiles, pka, Nucleophilicity, ...
     It will find in our database the best match, but if one gives a specific smiles in enter,
