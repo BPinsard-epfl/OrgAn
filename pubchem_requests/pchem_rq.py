@@ -1,23 +1,6 @@
 import requests
 import json
 import regex as re
-
-""" def getPugRestJsonFromSmiles(smiles):
-    url = "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/smiles/" + smiles + "/JSON"
-    req = requests.get(url)
-    return req.text """
-
-""" def getPkaFromSmiles(smiles):
-    url = "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/smiles/" + smiles + "/cids/TXT"
-    cid = int(requests.get(url).text)
-    url1 = "https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/compound/" + str(cid) + "/JSON/?heading=Dissociation+Constants"
-    req = requests.get(url1)
-    x = json.loads(req.text)
-    try:
-        pka = x['Record']['Section'][0]['Section'][0]['Section'][0]['Information'][0]['Value']['StringWithMarkup'][0]['String']
-        return float(re.search(r'\d+\.\d+', pka).group())
-    except:
-        return "No pKa was found" """
     
 def getMoleculeInfoFromSmiles(smiles):
     # This function takes a SMILES string as an input, and returns a Python Dictionary as an output, containing the properties shown in molProperties
@@ -68,6 +51,11 @@ def getMoleculeInfoFromSmiles(smiles):
         molProperties["pKa"] = float(re.search(r'\d+\.\d+', x).group())
     except:
         molProperties["pKa"] = None
+    req = requests.get("https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/compound/" + str(mol['id']['id']['cid']) + "/JSON/?heading=CAS")
+    try:
+        molProperties["CASno"] = json.loads(req.text)['Record']['Section'][0]['Section'][0]['Section'][0]['Information'][0]['Value']['StringWithMarkup'][0]['String']
+    except:
+        molProperties["CASno"] = None
     return molProperties
     
 
