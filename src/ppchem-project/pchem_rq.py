@@ -18,9 +18,9 @@ def getMoleculeInfoFromSmiles(smiles):
         "molWeight": None,
         "molFormula": None,
         "logP": None, 
-        "pKa": None,
+        "pKa": None, # TODO: add pKa estimation boolean
         "charge": mol["charge"],
-        "sterimol": None}
+        "sterimol": None} # TODO: add sterimol thing
     props = mol['props']
     i = 0
     while True: # This might be a bit of a barbaric approach but hey, if it works, it works. Basically I run the loop until the index goes out of range, which will raise an exception, indicating we've reached the end of the list.
@@ -51,6 +51,7 @@ def getMoleculeInfoFromSmiles(smiles):
         molProperties["pKa"] = float(re.search(r'\d+\.\d+', x).group())
     except:
         molProperties["pKa"] = None
+    # TODO: add pKa estimate for molecules without pKa using PyPka
     req = requests.get("https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/compound/" + str(mol['id']['id']['cid']) + "/JSON/?heading=CAS")
     try:
         molProperties["CASno"] = json.loads(req.text)['Record']['Section'][0]['Section'][0]['Section'][0]['Information'][0]['Value']['StringWithMarkup'][0]['String']
@@ -58,6 +59,6 @@ def getMoleculeInfoFromSmiles(smiles):
         molProperties["CASno"] = None
     return molProperties
     
-
+# test functions
 print(getMoleculeInfoFromSmiles("O=C(O)c1c(C(O)=O)cccc1"))
 print(getMoleculeInfoFromSmiles("CCO"))
