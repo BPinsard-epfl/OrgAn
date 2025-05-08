@@ -7,11 +7,11 @@ from pathlib import Path
 
 
 
-datapath = "data/.csv"
+datapath = "data/.csv" #TODO complete
 data = pd.read_csv(datapath)
 
 
-def SmilesDataFrame(file : str, sep_ : str = ";", skiprows_ : int | Sequence[int] | bool = False, skipblanklines_ : bool = True) -> pd.DataFrame:
+def s<milesDataFrame(file : str, sep_ : str = ";", skiprows_ : int | Sequence[int] | bool = False, skipblanklines_ : bool = True) -> pd.DataFrame:
     """
     This function will create the dataframe thanks to the file given.
     It will be then used in further functions.
@@ -51,19 +51,23 @@ def givesDataFrame(file : str, sep_ : str = ";", skiprows_ : int | Sequence[int]
     """
 
     df_smiles = df_smiles(file, sep_, skiprows_, skipblanklines_)
-    df_smiles.iloc[0:0,:]= df_smiles.iloc[0:0,:].apply(Chem.MolToSmiles(Chem.MolFromSmiles()))
 
     dic_for_df = {
         "name" : [],
         "cid" : [],
+        "CAS" : [],
         "smiles" : [],
+        "molWeight" : [],
+        "molFormula" : [],
+        "logP" : [],
         "pKa" : [],
-        "logP" : []
+        "charge" : [],
+        "sterimol" : []
     }
 
     for i in range(len(df_smiles)):
-        props = getMoleculeInfoFromSmiles(df_smiles.iloc[0,i])
-        for p in ["name", "cid", "smiles", "pKa", "logP"]:
+        props = pchem_rq.getMoleculeInfoFromSmiles(df_smiles.iloc[0,i])
+        for p in list(dic_for_df.keys()):
             dic_for_df[p].append(props[p])
     
     return pd.DataFrame(dic_for_df)
@@ -114,7 +118,7 @@ def findLogPGaps(df : pd.DataFrame, nb : int = 1) -> dict[float, tuple[int, int]
     return maxs_dic
  
 
-def findAcidOrBase(pka : float = m.inf, smiles : str = "", logP : float = m.inf, nu : str = "") -> pd.DataFrame:
+def findAcidOrBase(pka : float = m.inf, smiles : str = "", logP : float = m.inf, charge : int = 100) -> pd.DataFrame:
     """
     Gives a specific acid based on Smiles, pka, Nucleophilicity, ...
     It will find in our database the best match, but if one gives a specific smiles in enter,
@@ -126,7 +130,7 @@ def findAcidOrBase(pka : float = m.inf, smiles : str = "", logP : float = m.inf,
     if smiles:
         try:
             smiles = Chem.MolToSmiles(Chem.MolFromSmiles(smiles))
-            data_sorted = data_sorted[data_sorted["Smiles"] == smiles]
+            data_sorted = data_sorted[data_sorted["smiles"] == smiles]
         except Exception as e :
             assert ValueError(f"The smiles is not correct. Error : \n{e}")
 
@@ -138,13 +142,13 @@ def findAcidOrBase(pka : float = m.inf, smiles : str = "", logP : float = m.inf,
                 "Nucleophilicity" : data_sorted["Nucleophilicity"].iloc[0]
             }
             return properties
-        elif ...: # faire avec un call pubchem
+        elif : # faire avec un call pubchem
             ...
         else: 
             assert KeyError("Could not find your molecule.")
     
-    if nu:
-        data_sorted = data_sorted[data_sorted["Nucleophilicity"] == nu]
+    if charge != 100:
+        data_sorted = data_sorted[data_sorted["charge"] == charge]
 
     if logP != m.inf:
         data_sorted = data_sorted[data_sorted["LogP"] == logP]
