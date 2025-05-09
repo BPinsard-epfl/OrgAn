@@ -1,5 +1,6 @@
 import pandas as pd
 import math as m
+import numpy as np
 
 from rdkit import Chem
 from typing import Sequence
@@ -10,28 +11,6 @@ from pathlib import Path
 datapath = "data/.csv" #TODO complete
 data = pd.read_csv(datapath)
 
-
-def s<milesDataFrame(file : str, sep_ : str = ";", skiprows_ : int | Sequence[int] | bool = False, skipblanklines_ : bool = True) -> pd.DataFrame:
-    """
-    This function will create the dataframe thanks to the file given.
-    It will be then used in further functions.
-    """
-    
-    p = Path(".")
-    file_path = p / file
-
-    try:
-        file_path.exists()
-        file_path.is_file()
-    except FileExistsError:
-        assert(f"file `{file}` does not exist, or, perhaps, is not a file.")
-
-    try:
-        df = pd.read_csv(file, sep = sep_, skiprows = skiprows_, skip_blank_lines = skipblanklines_ )
-    except AssertionError:
-        assert("The file does not correspond to a CSV format.")
-    
-    return df
 
 
 def givesDataFrame(file : str, sep_ : str = ";", skiprows_ : int | Sequence[int] | bool = False, skipblanklines_ : bool = True) -> pd.DataFrame:
@@ -50,7 +29,19 @@ def givesDataFrame(file : str, sep_ : str = ";", skiprows_ : int | Sequence[int]
     Sterimol is calculated thanks to wSterimol package.
     """
 
-    df_smiles = df_smiles(file, sep_, skiprows_, skipblanklines_)
+    p = Path(".")
+    file_path = p / file
+
+    try:
+        file_path.exists()
+        file_path.is_file()
+    except FileExistsError:
+        assert(f"file `{file}` does not exist, or, perhaps, is not a file.")
+
+    try:
+        df_smiles = pd.read_csv(file, sep = sep_, skiprows = skiprows_, skip_blank_lines = skipblanklines_ )
+    except AssertionError:
+        assert("The file does not correspond to a CSV format.")
 
     dic_for_df = {
         "name" : [],
@@ -118,7 +109,7 @@ def findLogPGaps(df : pd.DataFrame, nb : int = 1) -> dict[float, tuple[int, int]
     return maxs_dic
  
 
-def findAcidOrBase(pka : float = m.inf, smiles : str = "", logP : float = m.inf, charge : int = 100) -> pd.DataFrame:
+def findCompounds(pka : float = m.inf, logP : float = m.inf, charge : int = 100, sterimol = m.inf, smiles : str = "") -> pd.DataFrame:
     """
     Gives a specific acid based on Smiles, pka, Nucleophilicity, ...
     It will find in our database the best match, but if one gives a specific smiles in enter,
@@ -127,6 +118,7 @@ def findAcidOrBase(pka : float = m.inf, smiles : str = "", logP : float = m.inf,
     
     data_sorted = data.sort_values(by="pKa")
     
+    #1 value return
     if smiles:
         try:
             smiles = Chem.MolToSmiles(Chem.MolFromSmiles(smiles))
@@ -141,30 +133,27 @@ def findAcidOrBase(pka : float = m.inf, smiles : str = "", logP : float = m.inf,
                 "pKa" : data_sorted["pka"].iloc[0],
                 "Nucleophilicity" : data_sorted["Nucleophilicity"].iloc[0]
             }
-            return properties
-        elif : # faire avec un call pubchem
-            ...
+            return pd.DataFrame(properties)
         else: 
-            assert KeyError("Could not find your molecule.")
+            return pd.DataFrame(pchem_rq.getMoleculeInfoFromSmiles(smiles))
+
     
     if charge != 100:
         data_sorted = data_sorted[data_sorted["charge"] == charge]
 
+    #Poly values return
+
+    if sterimol != m.inf: #mettre tous les filtres 
+        data_sorted.query("`sterimol`<sterimol+5 and `sterimol`>sterimol-5")
+        data_sorted.sort_values(by="sterimol", key = lambda col : abs(col-sterimol), inplace=True)
+
     if logP != m.inf:
-        data_sorted = data_sorted[data_sorted["LogP"] == logP]
+        data_sorted.query("`logP`<logP+3 and `logP`>logP-3")
+        data_sorted.sort_values(by="logP", key = lambda col : abs(col-logP), inplace=True)
 
-    if ...: #mettre tous les filtres 
-        ...
-
-    if pka == m.inf:
-        filter : dict[str, float|int]  = {"pKa diff" : m.inf, "index" : int(0)}
-        for i in range(len(data_sorted)):
-            if abs(data_sorted["pKa"].iloc[i]-pka) < filter["pKa diff"]:
-                filter["pKa diff"] = abs(data_sorted["pKa"].iloc[i]-pka)
-                filter["index"] = i
-            
-        result = data_sorted[data_sorted.iloc[filter["index"]-2:filter["index"]+2]]
-        return result
+    if pka != m.inf:
+        data_sorted.sort_values(by="pKa", key = lambda col : abs(col-pka), inplace=True)
+        return data_sorted.head()
     
     else: 
         return data_sorted.head()
