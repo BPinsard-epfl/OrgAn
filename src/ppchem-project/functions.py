@@ -1,15 +1,15 @@
 import pandas as pd
 import math as m
-import numpy as np
 
 from rdkit import Chem
 from typing import Sequence
 from pathlib import Path
 
+from pchem_rq import getMoleculeInfoFromSmiles
 
 
-datapath = "data/.csv" #TODO complete
-data = pd.read_csv(datapath)
+datapath = "data/data.csv" #TODO complete
+data : pd.DataFrame = pd.read_csv(datapath)
 
 
 
@@ -57,7 +57,7 @@ def givesDataFrame(file : str, sep_ : str = ";", skiprows_ : int | Sequence[int]
     }
 
     for i in range(len(df_smiles)):
-        props = pchem_rq.getMoleculeInfoFromSmiles(df_smiles.iloc[0,i])
+        props = getMoleculeInfoFromSmiles(df_smiles.iloc[0,i])
         for p in list(dic_for_df.keys()):
             dic_for_df[p].append(props[p])
     
@@ -135,7 +135,7 @@ def findCompounds(pka : float = m.inf, logP : float = m.inf, charge : int = 100,
             }
             return pd.DataFrame(properties)
         else: 
-            return pd.DataFrame(pchem_rq.getMoleculeInfoFromSmiles(smiles))
+            return pd.DataFrame(getMoleculeInfoFromSmiles(smiles))
 
     
     if charge != 100:
