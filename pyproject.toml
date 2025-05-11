@@ -1,0 +1,16 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "ppchem-project" #change name
+version = "0.1"
+dependencies = [
+    "rdkit",
+    "pandas",
+    "requests",
+    "regex"
+]
+
+[tool.hatch.build.targets.wheel]
+packages= ["src/ppchem-project"] #change name
