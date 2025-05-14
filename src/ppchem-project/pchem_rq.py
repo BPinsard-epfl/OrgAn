@@ -20,7 +20,7 @@ def getMoleculeInfoFromSmiles(smiles):
         "logP": None, 
         "pKa": None, # TODO: add pKa estimation boolean
         "charge": mol["charge"],
-        "sterimol": None} # TODO: add sterimol thing
+        "sterimol": None} # TODO: add sterimol thing using Morfeus – Sterimol
     props = mol['props']
     i = 0
     while True: # This might be a bit of a barbaric approach but hey, if it works, it works. Basically I run the loop until the index goes out of range, which will raise an exception, indicating we've reached the end of the list.
