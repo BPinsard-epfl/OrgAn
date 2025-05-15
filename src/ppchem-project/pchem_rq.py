@@ -3,7 +3,11 @@ import json
 import regex as re
     
 def getMoleculeInfoFromSmiles(smiles):
-    # This function takes a SMILES string as an input, and returns a Python Dictionary as an output, containing the properties shown in molProperties
+    """
+    This function takes a SMILES string as an input, and then does a series of
+    requests to PubChem to get various properties of the molecule. The properties
+    are then outputted 
+    """
     req = requests.get("https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/smiles/" + smiles + "/JSON")
     try:
         mol = json.loads(req.text)['PC_Compounds'][0]
@@ -17,7 +21,8 @@ def getMoleculeInfoFromSmiles(smiles):
         "smiles": None, 
         "molWeight": None,
         "molFormula": None,
-        "logP": None, 
+        "logP": None,
+        "is_pKa_parent_compound": False, 
         "pKa": None, # TODO: add pKa estimation boolean
         "charge": mol["charge"],
         "sterimol": None} # TODO: add sterimol thing using Morfeus – Sterimol
@@ -45,18 +50,17 @@ def getMoleculeInfoFromSmiles(smiles):
                 molProperties["smiles"] = val["sval"]
         except:
             continue
+    req = requests.get("https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/compound/" + str(mol['id']['id']['cid']) + "/JSON/?heading=CAS")
+    try:
+        molProperties["CASno"] = json.loads(req.text)['Record']['Section'][0]['Section'][0]['Section'][0]['Information'][0]['Value']['StringWithMarkup'][0]['String']
+    except:
+        molProperties["CASno"] = None
     req = requests.get("https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/compound/" + str(mol['id']['id']['cid']) + "/JSON/?heading=Dissociation+Constants")
     try:
         x = json.loads(req.text)['Record']['Section'][0]['Section'][0]['Section'][0]['Information'][0]['Value']['StringWithMarkup'][0]['String']
         molProperties["pKa"] = float(re.search(r'\d+\.\d+', x).group())
     except:
         molProperties["pKa"] = None
-    # TODO: add pKa estimate for molecules without pKa using PyPka
-    req = requests.get("https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/compound/" + str(mol['id']['id']['cid']) + "/JSON/?heading=CAS")
-    try:
-        molProperties["CASno"] = json.loads(req.text)['Record']['Section'][0]['Section'][0]['Section'][0]['Information'][0]['Value']['StringWithMarkup'][0]['String']
-    except:
-        molProperties["CASno"] = None
     return molProperties
     
 # test functions
