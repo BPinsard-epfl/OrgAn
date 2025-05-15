@@ -1,14 +1,15 @@
 import requests
 import json
 import regex as re
+import urllib.parse
     
-def getMoleculeInfoFromSmiles(smiles):
+def getMoleculeInfoFromSmiles(smiles: str) -> dict:
     """
     This function takes a SMILES string as an input, and then does a series of
     requests to PubChem to get various properties of the molecule. The properties
     are then outputted 
     """
-    req = requests.get("https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/smiles/" + smiles + "/JSON")
+    req = requests.get("https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/smiles/JSON?smiles=" + urllib.parse.quote_plus(smiles))
     try:
         mol = json.loads(req.text)['PC_Compounds'][0]
     except:
@@ -17,13 +18,13 @@ def getMoleculeInfoFromSmiles(smiles):
     molProperties = {
         "name": None, 
         "cid": mol['id']['id']['cid'], 
-        "CASno": None,
+        "CAS": None,
         "smiles": None, 
         "molWeight": None,
         "molFormula": None,
         "logP": None,
-        "is_pKa_parent_compound": False, 
-        "pKa": None, # TODO: add pKa estimation boolean
+        "is_pKa_parent_compound": False, # TODO: implement this
+        "pKa": None,
         "charge": mol["charge"],
         "sterimol": None} # TODO: add sterimol thing using Morfeus – Sterimol
     props = mol['props']
@@ -64,5 +65,5 @@ def getMoleculeInfoFromSmiles(smiles):
     return molProperties
     
 # test functions
-print(getMoleculeInfoFromSmiles("O=C(O)c1c(C(O)=O)cccc1"))
-print(getMoleculeInfoFromSmiles("CCO"))
+#print(getMoleculeInfoFromSmiles("O=C(O)c1c(C(O)=O)cccc1"))
+#print(getMoleculeInfoFromSmiles("CCO"))
