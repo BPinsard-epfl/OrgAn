@@ -82,13 +82,13 @@ def getMoleculeInfoFromSmiles(smiles: str) -> dict:
         coords.append([x[i], y[i], z[i]])
     sterimol = Sterimol(elements, coords, stmol['bonds']['aid1'][0], stmol['bonds']['aid2'][0])
     molProperties['sterimol'] = {
-        "L": float(sterimol.L_value),
-        "B_1": float(sterimol.B_1_value),
-        "B_5": float(sterimol.B_5_value)
+        "L": round(float(sterimol.L_value), 2),
+        "B_1": round(float(sterimol.B_1_value), 2),
+        "B_5": round(float(sterimol.B_5_value), 2)
     }
 
     return molProperties
     
 # test functions TODO: remove once finished
-# print(getMoleculeInfoFromSmiles("O=C(O)c1c(C(O)=O)cccc1"))
-# print(getMoleculeInfoFromSmiles("CCO"))
+#print(getMoleculeInfoFromSmiles("O=C(O)c1c(C(O)=O)cccc1"))
+#print(getMoleculeInfoFromSmiles("CCO"))
