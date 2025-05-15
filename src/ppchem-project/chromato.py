@@ -3,7 +3,6 @@ import matplotlib
 import pandas as pd
 
 from functions import givesDataFrame
-from pchem_rq import getMoleculeInfoFromSmiles
 
 def get_elution_order(solutes: pd.DataFrame, is_reverse_phase = False): # TODO: solutes as dataframe to get logP and thus elution order
     solutes = solutes.sort_values("logP", ascending=is_reverse_phase).reset_index(drop=True)
@@ -16,6 +15,7 @@ def get_elution_order(solutes: pd.DataFrame, is_reverse_phase = False): # TODO: 
 def estimate_retention_factor(logP, polarity_index):
     logk = logP - 0.5 * (10.2 - polarity_index)
     return 10 ** logk
+
 
 def calculate_polarity_index( # is it better to use abbreviations or the full name of the solvents for the arguments?
         cyclohex = 0, n_hex = 0, ccl4 = 0, ipr_ether = 0, 
