@@ -2,6 +2,7 @@ import requests
 import json
 import regex as re
 import urllib.parse
+from morfeus import Sterimol
     
 def getMoleculeInfoFromSmiles(smiles: str) -> dict:
     """
@@ -26,8 +27,13 @@ def getMoleculeInfoFromSmiles(smiles: str) -> dict:
         "is_pKa_parent_compound": False, # TODO: implement this
         "pKa": None,
         "charge": mol["charge"],
-        "sterimol": None} # TODO: add sterimol thing using Morfeus – Sterimol
+        "sterimol": {
+            "L": None,
+            "B_1": None,
+            "B_5": None
+        }}
     props = mol['props']
+
     i = 0
     while True: # This might be a bit of a barbaric approach but hey, if it works, it works. Basically I run the loop until the index goes out of range, which will raise an exception, indicating we've reached the end of the list.
         try:
@@ -51,19 +57,38 @@ def getMoleculeInfoFromSmiles(smiles: str) -> dict:
                 molProperties["smiles"] = val["sval"]
         except:
             continue
+    
     req = requests.get("https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/compound/" + str(mol['id']['id']['cid']) + "/JSON/?heading=CAS")
     try:
         molProperties["CASno"] = json.loads(req.text)['Record']['Section'][0]['Section'][0]['Section'][0]['Information'][0]['Value']['StringWithMarkup'][0]['String']
     except:
         molProperties["CASno"] = None
+    
     req = requests.get("https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/compound/" + str(mol['id']['id']['cid']) + "/JSON/?heading=Dissociation+Constants")
     try:
-        x = json.loads(req.text)['Record']['Section'][0]['Section'][0]['Section'][0]['Information'][0]['Value']['StringWithMarkup'][0]['String']
-        molProperties["pKa"] = float(re.search(r'\d+\.\d+', x).group())
+        j = json.loads(req.text)['Record']['Section'][0]['Section'][0]['Section'][0]['Information'][0]['Value']['StringWithMarkup'][0]['String']
+        molProperties["pKa"] = float(re.search(r'\d+\.\d+', j).group())
     except:
         molProperties["pKa"] = None
+    
+    req = requests.get("https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/" + str(mol['id']['id']['cid']) + "/JSON/?record_type=3d")
+    stmol = json.loads(req.text)['PC_Compounds'][0]
+    elements = stmol['atoms']['element']
+    y = stmol['coords'][0]['conformers'][0]['y']
+    x = stmol['coords'][0]['conformers'][0]['x']
+    z = stmol['coords'][0]['conformers'][0]['z']
+    coords = []
+    for i in range(len(x)):
+        coords.append([x[i], y[i], z[i]])
+    sterimol = Sterimol(elements, coords, stmol['bonds']['aid1'][0], stmol['bonds']['aid2'][0])
+    molProperties['sterimol'] = {
+        "L": float(sterimol.L_value),
+        "B_1": float(sterimol.B_1_value),
+        "B_5": float(sterimol.B_5_value)
+    }
+
     return molProperties
     
-# test functions
-#print(getMoleculeInfoFromSmiles("O=C(O)c1c(C(O)=O)cccc1"))
-#print(getMoleculeInfoFromSmiles("CCO"))
+# test functions TODO: remove once finished
+# print(getMoleculeInfoFromSmiles("O=C(O)c1c(C(O)=O)cccc1"))
+# print(getMoleculeInfoFromSmiles("CCO"))
