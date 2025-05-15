@@ -1,10 +1,16 @@
 import requests
 import json
 import regex as re
+import urllib.parse
+from morfeus import Sterimol
     
-def getMoleculeInfoFromSmiles(smiles):
-    # This function takes a SMILES string as an input, and returns a Python Dictionary as an output, containing the properties shown in molProperties
-    req = requests.get("https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/smiles/" + smiles + "/JSON")
+def getMoleculeInfoFromSmiles(smiles: str) -> dict:
+    """
+    This function takes a SMILES string as an input, and then does a series of
+    requests to PubChem to get various properties of the molecule. The properties
+    are then outputted 
+    """
+    req = requests.get("https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/smiles/JSON?smiles=" + urllib.parse.quote_plus(smiles))
     try:
         mol = json.loads(req.text)['PC_Compounds'][0]
     except:
@@ -13,15 +19,21 @@ def getMoleculeInfoFromSmiles(smiles):
     molProperties = {
         "name": None, 
         "cid": mol['id']['id']['cid'], 
-        "CASno": None,
+        "CAS": None,
         "smiles": None, 
         "molWeight": None,
         "molFormula": None,
-        "logP": None, 
-        "pKa": None, # TODO: add pKa estimation boolean
+        "logP": None,
+        "is_pKa_parent_compound": False, # TODO: implement this
+        "pKa": None,
         "charge": mol["charge"],
-        "sterimol": None} # TODO: add sterimol thing
+        "sterimol": {
+            "L": None,
+            "B_1": None,
+            "B_5": None
+        }}
     props = mol['props']
+
     i = 0
     while True: # This might be a bit of a barbaric approach but hey, if it works, it works. Basically I run the loop until the index goes out of range, which will raise an exception, indicating we've reached the end of the list.
         try:
@@ -45,20 +57,38 @@ def getMoleculeInfoFromSmiles(smiles):
                 molProperties["smiles"] = val["sval"]
         except:
             continue
-    req = requests.get("https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/compound/" + str(mol['id']['id']['cid']) + "/JSON/?heading=Dissociation+Constants")
-    try:
-        x = json.loads(req.text)['Record']['Section'][0]['Section'][0]['Section'][0]['Information'][0]['Value']['StringWithMarkup'][0]['String']
-        molProperties["pKa"] = float(re.search(r'\d+\.\d+', x).group())
-    except:
-        molProperties["pKa"] = None
-    # TODO: add pKa estimate for molecules without pKa using PyPka
+    
     req = requests.get("https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/compound/" + str(mol['id']['id']['cid']) + "/JSON/?heading=CAS")
     try:
         molProperties["CASno"] = json.loads(req.text)['Record']['Section'][0]['Section'][0]['Section'][0]['Information'][0]['Value']['StringWithMarkup'][0]['String']
     except:
         molProperties["CASno"] = None
+    
+    req = requests.get("https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/compound/" + str(mol['id']['id']['cid']) + "/JSON/?heading=Dissociation+Constants")
+    try:
+        j = json.loads(req.text)['Record']['Section'][0]['Section'][0]['Section'][0]['Information'][0]['Value']['StringWithMarkup'][0]['String']
+        molProperties["pKa"] = float(re.search(r'\d+\.\d+', j).group())
+    except:
+        molProperties["pKa"] = None
+    
+    req = requests.get("https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/" + str(mol['id']['id']['cid']) + "/JSON/?record_type=3d")
+    stmol = json.loads(req.text)['PC_Compounds'][0]
+    elements = stmol['atoms']['element']
+    y = stmol['coords'][0]['conformers'][0]['y']
+    x = stmol['coords'][0]['conformers'][0]['x']
+    z = stmol['coords'][0]['conformers'][0]['z']
+    coords = []
+    for i in range(len(x)):
+        coords.append([x[i], y[i], z[i]])
+    sterimol = Sterimol(elements, coords, stmol['bonds']['aid1'][0], stmol['bonds']['aid2'][0])
+    molProperties['sterimol'] = {
+        "L": round(float(sterimol.L_value), 2),
+        "B_1": round(float(sterimol.B_1_value), 2),
+        "B_5": round(float(sterimol.B_5_value), 2)
+    }
+
     return molProperties
     
-# test functions
-print(getMoleculeInfoFromSmiles("O=C(O)c1c(C(O)=O)cccc1"))
-print(getMoleculeInfoFromSmiles("CCO"))
+# test functions TODO: remove once finished
+#print(getMoleculeInfoFromSmiles("O=C(O)c1c(C(O)=O)cccc1"))
+#print(getMoleculeInfoFromSmiles("CCO"))
