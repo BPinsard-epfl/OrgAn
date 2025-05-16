@@ -9,7 +9,7 @@ from pchem_rq import getMoleculeInfoFromSmiles
 
 
 datapath = "data/data.csv" #TODO complete
-data : pd.DataFrame = pd.read_csv(datapath)
+# data : pd.DataFrame = pd.read_csv(datapath)
 
 
 
@@ -36,10 +36,10 @@ def givesDataFrame(file : str, sep_ : str = ";", skiprows_ : int | Sequence[int]
         file_path.exists()
         file_path.is_file()
     except FileExistsError:
-        assert(f"file `{file}` does not exist, or, perhaps, is not a file.")
+        assert(f"file `{file}` does not exist, or, perhaps, is not a file.") #TODO this doesn't work as it's supposed to. When a wrong path is entered, it raises another exception
 
     try:
-        df_smiles = pd.read_csv(file, sep = sep_, skiprows = skiprows_, skip_blank_lines = skipblanklines_ )
+        df_smiles = pd.read_csv(file) # , sep = sep_, skiprows = skiprows_, skip_blank_lines = skipblanklines_ TODO check this, see if we need to delete or keep and modify, as this raises an exception when the rest of the arguments are added
     except AssertionError:
         assert("The file does not correspond to a CSV format.")
 
@@ -57,7 +57,7 @@ def givesDataFrame(file : str, sep_ : str = ";", skiprows_ : int | Sequence[int]
     }
 
     for i in range(len(df_smiles)):
-        props = getMoleculeInfoFromSmiles(df_smiles.iloc[0,i])
+        props = getMoleculeInfoFromSmiles(df_smiles.iloc[i,0])
         for p in list(dic_for_df.keys()):
             dic_for_df[p].append(props[p])
     
