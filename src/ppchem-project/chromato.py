@@ -1,5 +1,5 @@
 import numpy as np
-import matplotlib
+import matplotlib.pyplot as plt
 import pandas as pd
 
 from functions import givesDataFrame
@@ -64,6 +64,36 @@ def calculate_polarity_index( # is it better to use abbreviations or the full na
     if cyclohex + n_hex + ccl4 + ipr_ether + toluene + et2o + thf + etoh + etoac + dioxane + meoh + mecn + water != 1:
         raise ValueError("The total of the volume fractions must be equal to 1")
     return 0.04 * cyclohex + 0.1 * n_hex + 1.6 * ccl4 + 2.4 * ipr_ether + 2.4 * toluene + 2.8 * et2o + 4.0 * thf + 4.3 * etoh + 4.4 * etoac + 4.8 * dioxane + 5.1 * meoh + 5.8 * mecn + 10.2 * water
+
+
+def shows_chromato(df : pd.DataFrame, savefigas : str = "") -> None:
+    x_time = np.array([x/100 for x in range(round(df[-1]*100)+100)])
+    y_signal = [0 for x in range(round(df[-1]*100)+100)]
+
+    index_df = 0
+    index_array = 0
+    while index_df<len(df):
+        if df[index_df]<x_time[index_array]:
+            index_array +=1
+        else :
+            if abs(df[index_df]-x_time[index_array])<abs(x_time[index_array]-x_time[index_array-1]):
+                y_signal[index_array] = 1
+                index_df += 1
+            else :
+                y_signal[index_array-1] = 1
+                index_df += 1
+        index_array += 1
+    
+    plt.plot(x_time, y_signal, "red", linewidth= 1.25, label= "Estimation")
+    plt.xlabel("Time [min]")
+    plt.ylabel("Signal")
+    plt.title("Estimated Chromatogram")
+
+    if savefigas :
+        plt.savefig(savefigas)
+
+    plt.show()
+
 
 # test functions
 #data = givesDataFrame("tests/test_data.csv")
