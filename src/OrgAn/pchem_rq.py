@@ -4,7 +4,7 @@ import regex as re
 import urllib.parse
 from morfeus import Sterimol
     
-def getMoleculeInfoFromSmiles(smiles: str) -> dict:
+def get_mol_info_from_smiles(smiles: str) -> dict:
     """
     This function takes a SMILES string as an input, and then does a series of
     requests to PubChem to get various properties of the molecule. The properties

@@ -5,15 +5,15 @@ from rdkit import Chem
 from typing import Sequence
 from pathlib import Path
 
-from pchem_rq import getMoleculeInfoFromSmiles
+from pchem_rq import get_mol_info_from_smiles
 
 
-datapath = "data/data.csv" #TODO complete
-# data : pd.DataFrame = pd.read_csv(datapath)
+datapath = "data/data.csv"
+data : pd.DataFrame = pd.read_csv(datapath)
 
 
 
-def givesDataFrame(file : str, sep_ : str = ";", skiprows_ : int | Sequence[int] | bool = False, skipblanklines_ : bool = True) -> pd.DataFrame:
+def gives_data_frame(file : str) -> pd.DataFrame:
     """
     Take a list of smile from a file and return a dataframe 
     with proprieties of each molecule according to PubChem.
@@ -35,15 +35,15 @@ def givesDataFrame(file : str, sep_ : str = ";", skiprows_ : int | Sequence[int]
     try:
         file_path.exists()
         file_path.is_file()
-    except FileExistsError:
-        assert(f"file `{file}` does not exist, or, perhaps, is not a file.") #TODO this doesn't work as it's supposed to. When a wrong path is entered, it raises another exception
+    except FileNotFoundError:
+        assert(f"file `{file}` does not exist, or, perhaps, is not a file.") 
 
     try:
-        df_smiles = pd.read_csv(file) # , sep = sep_, skiprows = skiprows_, skip_blank_lines = skipblanklines_ TODO check this, see if we need to delete or keep and modify, as this raises an exception when the rest of the arguments are added
+        df_smiles = pd.read_csv(file) 
     except AssertionError:
         assert("The file does not correspond to a CSV format.")
 
-    dic_for_df = {
+    dic_for_df : dict[str, list[str|float|int]]= {
         "name" : [],
         "cid" : [],
         "CAS" : [],
@@ -57,15 +57,21 @@ def givesDataFrame(file : str, sep_ : str = ";", skiprows_ : int | Sequence[int]
     }
 
     for i in range(len(df_smiles)):
-        props = getMoleculeInfoFromSmiles(df_smiles.iloc[i,0])
-        for p in list(dic_for_df.keys()):
-            dic_for_df[p].append(props[p])
+        if df_smiles.iloc[i,0] in data["smiles"]:
+            data_mol = data["smiles"==df_smiles.iloc[i,0]].iloc[0]
+            for key in list(data.columns.values):
+                dic_for_df[key].append(data_mol[key])
+
+        else:
+            props = get_mol_info_from_smiles(df_smiles.iloc[i,0])
+            for key in list(dic_for_df.keys()):
+                dic_for_df[key].append(props[key])
     
     return pd.DataFrame(dic_for_df)
 
             
 
-def findpKaGaps(df : pd.DataFrame, nb : int = 1) -> dict[float, tuple[int, int]]:
+def find_pKa_gaps(df : pd.DataFrame, nb : int = 1) -> dict[float, tuple[int, int]]:
     """
     A function used to find the biggest pka gaps of a dataframe. 
     It will give by default the biggest gap, but one can precise how many he wants.
@@ -87,7 +93,7 @@ def findpKaGaps(df : pd.DataFrame, nb : int = 1) -> dict[float, tuple[int, int]]
     return maxs_dic
 
 
-def findLogPGaps(df : pd.DataFrame, nb : int = 1) -> dict[float, tuple[int, int]]:
+def find_logp_gaps(df : pd.DataFrame, nb : int = 1) -> dict[float, tuple[int, int]]:
     """
     A function used to find the biggest logP gaps of a dataframe. 
     It will give by default the biggest gap, but one can precise how many he wants.
@@ -109,7 +115,7 @@ def findLogPGaps(df : pd.DataFrame, nb : int = 1) -> dict[float, tuple[int, int]
     return maxs_dic
  
 
-def findCompounds(pka : float = m.inf, logP : float = m.inf, charge : int = 100, sterimol = m.inf, smiles : str = "") -> pd.DataFrame:
+def find_compounds(pka : float = m.inf, logP : float = m.inf, charge : int = 100, sterimol = m.inf, smiles : str = "") -> pd.DataFrame:
     """
     Gives a specific acid based on Smiles, pka, Nucleophilicity, ...
     It will find in our database the best match, but if one gives a specific smiles in enter,
@@ -135,7 +141,7 @@ def findCompounds(pka : float = m.inf, logP : float = m.inf, charge : int = 100,
             }
             return pd.DataFrame(properties)
         else: 
-            return pd.DataFrame(getMoleculeInfoFromSmiles(smiles))
+            return pd.DataFrame(get_mol_info_from_smiles(smiles))
 
     
     if charge != 100:
