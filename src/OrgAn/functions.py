@@ -5,7 +5,7 @@ from rdkit import Chem
 from typing import Sequence
 from pathlib import Path
 
-from pchem_rq import get_mol_info_from_smiles
+from src.OrgAn.pchem_rq import get_mol_info_from_smiles
 
 
 datapath = "data/data.csv"
@@ -53,7 +53,9 @@ def gives_data_frame(file : str) -> pd.DataFrame:
         "logP" : [],
         "pKa" : [],
         "charge" : [],
-        "sterimol" : []
+        "sterimol_L": [],
+        "sterimol_B1": [],
+        "sterimol_B5": []
     }
 
     for i in range(len(df_smiles)):
