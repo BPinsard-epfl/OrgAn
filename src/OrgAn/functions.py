@@ -5,7 +5,7 @@ from rdkit import Chem
 from typing import Sequence
 from pathlib import Path
 
-from src.OrgAn.pchem_rq import get_mol_info_from_smiles
+from pchem_rq import get_mol_info_from_smiles
 
 
 datapath = "data/data.csv"
