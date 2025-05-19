@@ -2,8 +2,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 
-from functions import givesDataFrame
-
 def get_elution_order(solutes: pd.DataFrame, is_reverse_phase = False) -> pd.DataFrame:
     solutes = solutes.sort_values("logP", ascending=is_reverse_phase).reset_index(drop=True)
     return solutes
@@ -94,10 +92,3 @@ def generate_chromatogram(df : pd.DataFrame, polarity_idx : float, dead_time : f
         plt.savefig(savefigas)
 
     plt.show()
-
-
-# test functions
-#data = givesDataFrame("tests/test_data.csv")
-#print(data)
-#print(get_elution_order(data))
-#print(calculate_polarity_index(water=0.6,meoh=0.4))
