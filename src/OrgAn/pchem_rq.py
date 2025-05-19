@@ -3,6 +3,7 @@ import json
 import regex as re
 import urllib.parse
 from morfeus import Sterimol
+from rdkit import Chem
     
 def get_mol_info_from_smiles(smiles: str) -> dict:
     """
@@ -54,7 +55,7 @@ def get_mol_info_from_smiles(smiles: str) -> dict:
             elif currentProperty["name"] == "Preferred":
                 molProperties["name"] = val["sval"]
             elif currentProperty["name"] == "Canonical":
-                molProperties["smiles"] = val["sval"]
+                molProperties["smiles"] = str(Chem.MolToSmiles(Chem.MolFromSmiles(val["sval"])))
         except:
             continue
     
