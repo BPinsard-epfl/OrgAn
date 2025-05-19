@@ -50,6 +50,7 @@ def gives_data_frame(file : str) -> pd.DataFrame:
         "molWeight" : [],
         "molFormula" : [],
         "logP" : [],
+        "is_pKa_parent_compound" : [],
         "pKa" : [],
         "charge" : [],
         "sterimol" : []
@@ -59,7 +60,9 @@ def gives_data_frame(file : str) -> pd.DataFrame:
         if Chem.CanonSmiles(df_smiles.iloc[i,0]) in data["smiles"]:
             data_mol = data["smiles"==Chem.CanonSmiles(df_smiles.iloc[i,0])].iloc[0]
             for key in list(data.columns.values):
-                dic_for_df[key].append(data_mol[key])
+                if key not in ["sterimol_L", "sterimol_B1", "sterimol_B5"]:
+                    dic_for_df[key].append(data_mol[key])
+            dic_for_df["is_pKa_parent_compound"].append(False)
 
         else:
             props = get_mol_info_from_smiles(df_smiles.iloc[i,0])

@@ -1,6 +1,6 @@
-name,cid,CAS,smiles,molWeight,molFormula,logP,charge,pKa,sterimol_L,sterimol_B1,sterimol_B5
-propanoic acid,1032,79-09-4,CCC(=O)O,74.08,C3H6O2,0.3,0,4.874,5.49,1.74,3.61
-ethanol,702,64-17-5,CCO,46.07,C2H6O,-0.1,0,15.9,4.51,1.7,3.26
-acetic acid,176,64-19-7,CC(=O)O,60.05,C2H4O2,-0.2,0,4.756,4.48,1.7,3.22
-propan-2-one,180,67-64-1,CC(=O)C,58.08,C3H6O,-0.1,0,20.0,4.15,1.99,3.24
-2-aminopropanoic acid,602,302-72-7,CC(C(=O)O)N,89.09,C3H7NO2,-3.0,0,,5.3,1.7,4.52
+name,cid,CAS,smiles,molWeight,molFormula,logP,charge,is_pKa_parent_compound,pKa,sterimol_L,sterimol_B1,sterimol_B5
+propanoic acid,1032,79-09-4,CCC(=O)O,74.08,C3H6O2,0.3,0,False,4.874,5.49,1.74,3.61
+ethanol,702,64-17-5,CCO,46.07,C2H6O,-0.1,0,False,15.9,4.51,1.7,3.26
+acetic acid,176,64-19-7,CC(=O)O,60.05,C2H4O2,-0.2,0,False,4.756,4.48,1.7,3.22
+propan-2-one,180,67-64-1,CC(=O)C,58.08,C3H6O,-0.1,0,False,20.0,4.15,1.99,3.24
+2-aminopropanoic acid,602,302-72-7,CC(C(=O)O)N,89.09,C3H7NO2,-3.0,0,False,,5.3,1.7,4.52

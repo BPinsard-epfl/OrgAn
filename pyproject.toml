@@ -10,7 +10,7 @@ authors = [
     { name="Johan Schmidt", email="johan.schmidt@epfl.ch"},
     { name="Raphaël Tisseyre", email="raphael.tisseyre@epfl.ch"}
 ]
-description = ""
+description = "A Python package for retrieving, organizing, and analyzing molecular properties from SMILES representations, using PubChem, RDKit, Pandas, and Morfeus."
 readme = "README.toml"
 requires-python = ">=3.10"
 classifiers = [
