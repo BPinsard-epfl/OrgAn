@@ -57,8 +57,8 @@ def gives_data_frame(file : str) -> pd.DataFrame:
     }
 
     for i in range(len(df_smiles)):
-        if df_smiles.iloc[i,0] in data["smiles"]:
-            data_mol = data["smiles"==df_smiles.iloc[i,0]].iloc[0]
+        if Chem.CanonSmiles(df_smiles.iloc[i,0]) in data["smiles"]:
+            data_mol = data["smiles"==Chem.CanonSmiles(df_smiles.iloc[i,0])].iloc[0]
             for key in list(data.columns.values):
                 dic_for_df[key].append(data_mol[key])
 
@@ -115,7 +115,8 @@ def find_logp_gaps(df : pd.DataFrame, nb : int = 1) -> dict[float, tuple[int, in
     return maxs_dic
  
 
-def find_compounds(pka : float = m.inf, logP : float = m.inf, charge : int = 100, sterimol = m.inf, smiles : str = "") -> pd.DataFrame:
+def find_compounds(pka : float = m.inf, logP : float = m.inf, charge : int = 100,
+                   sterimol = m.inf, smiles : str = "") -> pd.DataFrame:
     """
     Gives a specific acid based on Smiles, pka, Nucleophilicity, ...
     It will find in our database the best match, but if one gives a specific smiles in enter,
@@ -127,7 +128,7 @@ def find_compounds(pka : float = m.inf, logP : float = m.inf, charge : int = 100
     #1 value return
     if smiles:
         try:
-            smiles = Chem.MolToSmiles(Chem.MolFromSmiles(smiles))
+            smiles = Chem.CanonSmiles(smiles)
             data_sorted = data_sorted[data_sorted["smiles"] == smiles]
         except Exception as e :
             assert ValueError(f"The smiles is not correct. Error : \n{e}")
