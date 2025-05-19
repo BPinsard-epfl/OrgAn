@@ -59,10 +59,10 @@ def gives_data_frame(file : str) -> pd.DataFrame:
     }
 
     for i in range(len(df_smiles)):
-        if Chem.CanonSmiles(df_smiles.iloc[i,0]) in data["smiles"]:
-            data_mol = data["smiles"==Chem.CanonSmiles(df_smiles.iloc[i,0])].iloc[0]
+        if Chem.CanonSmiles(df_smiles.iloc[i,0]) in data["smiles"].values:
+            data_mol = data.loc[data["smiles"]==Chem.CanonSmiles(df_smiles.iloc[i,0])]
             for key in list(data.columns.values):
-                dic_for_df[key].append(data_mol[key])
+                dic_for_df[key].append(data_mol[key].tolist()[0])
 
         else:
             props = get_mol_info_from_smiles(df_smiles.iloc[i,0])
@@ -70,8 +70,6 @@ def gives_data_frame(file : str) -> pd.DataFrame:
                 dic_for_df[key].append(props[key])
     
     return pd.DataFrame(dic_for_df)
-
-            
 
 def find_pKa_gaps(df : pd.DataFrame, nb : int = 1) -> dict[float, tuple[int, int]]:
     """
