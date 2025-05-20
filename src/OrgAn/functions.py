@@ -66,8 +66,9 @@ def gives_data_frame(file : str) -> pd.DataFrame:
 
         else:
             props = get_mol_info_from_smiles(df_smiles.iloc[i,0])
-            for key in list(dic_for_df.keys()):
-                dic_for_df[key].append(props[key])
+            for key in dic_for_df:
+                dic_for_df[key].append(data_mol[key].tolist()[0])
+
     
     return pd.DataFrame(dic_for_df)
 
