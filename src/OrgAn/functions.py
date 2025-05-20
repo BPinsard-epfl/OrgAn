@@ -12,7 +12,7 @@ data : pd.DataFrame = pd.read_csv(datapath)
 
 
 
-def gives_data_frame(file : str) -> pd.DataFrame:
+def gives_dataframe(file : str) -> pd.DataFrame:
     """
     Take a list of smile from a file and return a dataframe 
     with proprieties of each molecule according to PubChem.
