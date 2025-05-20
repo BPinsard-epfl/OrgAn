@@ -1,4 +1,4 @@
-names,smiles,cid,CAS,molWeight,molFormula,logP,charge,pKa,sterimol_L,sterimol_B1,sterimol_B5
+name,smiles,cid,CAS,molWeight,molFormula,logP,charge,pKa,sterimol_L,sterimol_B1,sterimol_B5
 7-{[Amino(phenyl)acetyl]amino}-3-methyl-8-oxo-5-thia-1-azabicyclo[4.2.0]oct-2-ene-2-carboxylic acid,CC1=C(C(=O)O)N2C(=O)C(NC(=O)C(N)c3ccccc3)C2SC1,2666,108260-04-4,347.4,C16H17N3O4S,0.6,0,,7.31,3.73,9.09
 "2,4-Dinitrotoluene",Cc1ccc([N+](=O)[O-])cc1[N+](=O)[O-],8461,121-14-2,182.13,C7H6N2O4,2.0,0,,6.73,1.97,7.48
 Racepinephrine,CNCC(O)c1ccc(O)c(O)c1,838,329-65-7,183.2,C9H13NO3,-1.4,0,,5.27,2.15,6.85
