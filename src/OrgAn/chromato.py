@@ -97,10 +97,3 @@ def shows_chromato(df : pd.DataFrame, polarity_idx :float, t_m : float = 1,  is_
         plt.savefig(savefigas)
 
     plt.show()
-
-
-# test functions
-#data = givesDataFrame("tests/test_data.csv")
-#print(data)
-#print(get_elution_order(data))
-#print(calculate_polarity_index(water=0.6,meoh=0.4))

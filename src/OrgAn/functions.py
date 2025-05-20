@@ -118,7 +118,7 @@ def find_logp_gaps(df : pd.DataFrame, nb : int = 1) -> dict[float, tuple[int, in
  
 
 def find_compounds(pka : float = m.inf, logP : float = m.inf, charge : int = 100,
-                   sterimol = m.inf, smiles : str = "") -> pd.DataFrame:
+                   sterimol : dict[str, float] = {}, smiles : str = "") -> pd.DataFrame:
     """
     Gives a specific acid based on Smiles, pka, Nucleophilicity, ...
     It will find in our database the best match, but if one gives a specific smiles in enter,
@@ -152,18 +152,22 @@ def find_compounds(pka : float = m.inf, logP : float = m.inf, charge : int = 100
 
     #Poly values return
 
-    if sterimol != m.inf: #mettre tous les filtres 
-        data_sorted.query("`sterimol`<sterimol+5 and `sterimol`>sterimol-5")
-        data_sorted.sort_values(by="sterimol", key = lambda col : abs(col-sterimol), inplace=True)
+    if sterimol:  
+        data_sorted.query("`sterimol_L`<=sterimol["L"]+3 and `sterimol_L`>=sterimol["L"]-3")
+        data_sorted.query("`sterimol_B1`<=sterimol["B1"]+3 and `sterimol_B1`>=sterimol["B1"]-3")
+        data_sorted.query("`sterimol_B5`<=sterimol["B5"]+3 and `sterimol_B5`>=sterimol["B5"]-3")
+        data_sorted.sort_values(by=["sterimol_L", "sterimol_B1", "sterimol_B5"], key = lambda col : abs(col-sterimol[col.index.split("_", 1)[1]]), inplace=True)
 
     if logP != m.inf:
-        data_sorted.query("`logP`<logP+3 and `logP`>logP-3")
+        data_sorted.query("`logP`<=logP+1.5 and `logP`>=logP-1.5")
         data_sorted.sort_values(by="logP", key = lambda col : abs(col-logP), inplace=True)
 
     if pka != m.inf:
         data_sorted.sort_values(by="pKa", key = lambda col : abs(col-pka), inplace=True)
-        return data_sorted.head()
     
-    else: 
-        return data_sorted.head()
+    if data_sorted.dropna().empty:
+        print("No compound found")    
+    
+    return data_sorted.head()
+    
     
