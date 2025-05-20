@@ -61,7 +61,7 @@ def gives_data_frame(file : str) -> pd.DataFrame:
     for i in range(len(df_smiles)):
         if Chem.CanonSmiles(df_smiles.iloc[i,0]) in data["smiles"].values:
             data_mol = data.loc[data["smiles"]==Chem.CanonSmiles(df_smiles.iloc[i,0])]
-            for key in list(data.columns.values):
+            for key in dic_for_df:
                 dic_for_df[key].append(data_mol[key].tolist()[0])
 
         else:
