@@ -11,12 +11,14 @@ def get_mol_info_from_smiles(smiles: str) -> dict:
     requests to PubChem to get various properties of the molecule. The properties
     are then outputted 
     """
+    if type(smiles) != str:
+        raise TypeError("Expected str, got " + str(type(smiles)))
     req = requests.get("https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/smiles/JSON?smiles=" + urllib.parse.quote_plus(smiles))
     try:
         mol = json.loads(req.text)['PC_Compounds'][0]
     except:
         mol = json.loads(req.text)['Fault']
-        raise Exception(mol['Code'] + "\n" + mol['Message'])
+        raise ValueError(mol['Code'] + "\n" + mol['Message'])
     molProperties = {
         "name": None, 
         "cid": mol['id']['id']['cid'], 
@@ -60,9 +62,9 @@ def get_mol_info_from_smiles(smiles: str) -> dict:
     
     req = requests.get("https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/compound/" + str(mol['id']['id']['cid']) + "/JSON/?heading=CAS")
     try:
-        molProperties["CASno"] = json.loads(req.text)['Record']['Section'][0]['Section'][0]['Section'][0]['Information'][0]['Value']['StringWithMarkup'][0]['String']
+        molProperties["CAS"] = json.loads(req.text)['Record']['Section'][0]['Section'][0]['Section'][0]['Information'][0]['Value']['StringWithMarkup'][0]['String']
     except:
-        molProperties["CASno"] = None
+        molProperties["CAS"] = None
     
     req = requests.get("https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/compound/" + str(mol['id']['id']['cid']) + "/JSON/?heading=Dissociation+Constants")
     try:
@@ -70,19 +72,22 @@ def get_mol_info_from_smiles(smiles: str) -> dict:
         molProperties["pKa"] = float(re.search(r'\d+\.\d+', j).group())
     except:
         molProperties["pKa"] = None
+    try:
+        req = requests.get("https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/" + str(mol['id']['id']['cid']) + "/JSON/?record_type=3d")
+        stmol = json.loads(req.text)['PC_Compounds'][0]
+    except:
+        pass
+    else:
+        elements = stmol['atoms']['element']
+        y = stmol['coords'][0]['conformers'][0]['y']
+        x = stmol['coords'][0]['conformers'][0]['x']
+        z = stmol['coords'][0]['conformers'][0]['z']
+        coords = []
+        for i in range(len(x)):
+            coords.append([x[i], y[i], z[i]])
+        sterimol = Sterimol(elements, coords, stmol['bonds']['aid1'][0], stmol['bonds']['aid2'][0])
+        molProperties["sterimol_L"] = round(float(sterimol.L_value), 2)
+        molProperties["sterimol_B1"] = round(float(sterimol.B_1_value), 2)
+        molProperties["sterimol_B5"] = round(float(sterimol.B_5_value), 2)
     
-    req = requests.get("https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/" + str(mol['id']['id']['cid']) + "/JSON/?record_type=3d")
-    stmol = json.loads(req.text)['PC_Compounds'][0]
-    elements = stmol['atoms']['element']
-    y = stmol['coords'][0]['conformers'][0]['y']
-    x = stmol['coords'][0]['conformers'][0]['x']
-    z = stmol['coords'][0]['conformers'][0]['z']
-    coords = []
-    for i in range(len(x)):
-        coords.append([x[i], y[i], z[i]])
-    sterimol = Sterimol(elements, coords, stmol['bonds']['aid1'][0], stmol['bonds']['aid2'][0])
-    molProperties["sterimol_L"] = round(float(sterimol.L_value), 2)
-    molProperties["sterimol_B1"] = round(float(sterimol.B_1_value), 2)
-    molProperties["sterimol_B5"] = round(float(sterimol.B_5_value), 2)
-
     return molProperties
