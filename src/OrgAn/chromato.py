@@ -2,7 +2,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 
-def get_elution_order(solutes: pd.DataFrame, is_reverse_phase = False) -> pd.DataFrame:
+
+def get_elution_order(solutes: pd.DataFrame, is_reverse_phase : bool = False) -> pd.DataFrame:
+  
     solutes = solutes.sort_values("logP", ascending=is_reverse_phase).reset_index(drop=True)
     return solutes
 
@@ -63,7 +65,7 @@ def calculate_polarity_index( # is it better to use abbreviations or the full na
 
 
 def generate_chromatogram(solutes : pd.DataFrame, polarity_index : float, dead_time : float = 1, savefigas : str = "") -> None:
-    
+    solutes = get_elution_order(solutes, True)
     solutes["retention time"] = solutes["logP"].apply(lambda x : (estimate_retention_factor(x, polarity_index)+1)*dead_time)
 
     x_time = np.array([x/100 for x in range(round(solutes["retention time"].iloc[-1]*100)+100)])
