@@ -12,7 +12,7 @@ data : pd.DataFrame = pd.read_csv(datapath)
 
 
 
-def gives_dataframe(file : str) -> pd.DataFrame:
+def gives_data_frame(file : str) -> pd.DataFrame: # TODO: give a more "conventional" name
     """
     Take a list of smile from a file and return a dataframe 
     with proprieties of each molecule according to PubChem.
@@ -23,9 +23,7 @@ def gives_dataframe(file : str) -> pd.DataFrame:
     name, canonical smile, CAS, formula, mol weight,
     pKa, logP, formal charge and sterimol.
 
-    When no pKa is found from pubchem it is predicted with 
-    PypKa package.
-    Sterimol is calculated thanks to wSterimol package.
+    Sterimol is calculated using morfeus.
     """
 
     p = Path(".")
@@ -50,7 +48,6 @@ def gives_dataframe(file : str) -> pd.DataFrame:
         "molWeight" : [],
         "molFormula" : [],
         "logP" : [],
-        "is_pKa_parent_compound" : [],
         "pKa" : [],
         "charge" : [],
         "sterimol_L": [],
@@ -150,9 +147,9 @@ def find_compounds(pka : float = m.inf, logP : float = m.inf, charge : int = 100
     #Poly values return
 
     if sterimol:  
-        data_sorted.query("`sterimol_L`<=sterimol["L"]+3 and `sterimol_L`>=sterimol["L"]-3")
-        data_sorted.query("`sterimol_B1`<=sterimol["B1"]+3 and `sterimol_B1`>=sterimol["B1"]-3")
-        data_sorted.query("`sterimol_B5`<=sterimol["B5"]+3 and `sterimol_B5`>=sterimol["B5"]-3")
+        data_sorted.query("`sterimol_L`<=sterimol['L']+3 and `sterimol_L`>=sterimol['L']-3")
+        data_sorted.query("`sterimol_B1`<=sterimol['B1']+3 and `sterimol_B1`>=sterimol['B1']-3")
+        data_sorted.query("`sterimol_B5`<=sterimol['B5']+3 and `sterimol_B5`>=sterimol['B5']-3")
         data_sorted.sort_values(by=["sterimol_L", "sterimol_B1", "sterimol_B5"], key = lambda col : abs(col-sterimol[col.index.split("_", 1)[1]]), inplace=True)
 
     if logP != m.inf:
