@@ -2,13 +2,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 
-from functions import givesDataFrame
 
-def get_elution_order(solutes: pd.DataFrame, is_reverse_phase : bool = False) -> pd.DataFrame: # TODO: solutes as dataframe to get logP and thus elution order
+def get_elution_order(solutes: pd.DataFrame, is_reverse_phase : bool = False) -> pd.DataFrame:
+  
     solutes = solutes.sort_values("logP", ascending=is_reverse_phase).reset_index(drop=True)
-    #elution_order = []
-    #for i in range(len(solutes)):
-    #    elution_order.append(solutes.iloc[i,0])
     return solutes
 
 
@@ -67,20 +64,20 @@ def calculate_polarity_index( # is it better to use abbreviations or the full na
     return 0.04 * cyclohex + 0.1 * n_hex + 1.6 * ccl4 + 2.4 * ipr_ether + 2.4 * toluene + 2.8 * et2o + 4.0 * thf + 4.3 * etoh + 4.4 * etoac + 4.8 * dioxane + 5.1 * meoh + 5.8 * mecn + 10.2 * water
 
 
-def shows_chromato(df : pd.DataFrame, polarity_idx :float, t_m : float = 1,  is_reverse_phase : bool = False, savefigas : str = "") -> None:
-    df = get_elution_order(df, is_reverse_phase)
-    df["retention time"] = df["logP"].apply(lambda x : (estimate_retention_factor(x, polarity_idx)+1)*t_m)
+def generate_chromatogram(solutes : pd.DataFrame, polarity_index : float, dead_time : float = 1, savefigas : str = "") -> None:
+    solutes = get_elution_order(solutes, True)
+    solutes["retention time"] = solutes["logP"].apply(lambda x : (estimate_retention_factor(x, polarity_index)+1)*dead_time)
 
-    x_time = np.array([x/100 for x in range(round(df["retention time"].iloc[-1]*100)+100)])
-    y_signal = [0 for x in range(round(df["retention time"].iloc[-1]*100)+100)]
+    x_time = np.array([x/100 for x in range(round(solutes["retention time"].iloc[-1]*100)+100)])
+    y_signal = [0 for x in range(round(solutes["retention time"].iloc[-1]*100)+100)]
 
     index_df = 0
     index_array = 0
-    while index_df<len(df):
-        if df[index_df]<x_time[index_array]:
+    while index_df<len(solutes):
+        if solutes[index_df]<x_time[index_array]:
             index_array +=1
         else :
-            if abs(df[index_df]-x_time[index_array])<abs(x_time[index_array]-x_time[index_array-1]):
+            if abs(solutes[index_df]-x_time[index_array])<abs(x_time[index_array]-x_time[index_array-1]):
                 y_signal[index_array] = 1
                 index_df += 1
             else :
