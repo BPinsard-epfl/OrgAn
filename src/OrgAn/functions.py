@@ -131,8 +131,8 @@ def find_compounds(pka : float = m.inf, logP : float = m.inf, charge : int = 100
 
         if not data_sorted.empty:
             properties : dict[str, str|float] = {
-                "Names" : data_sorted["Names"].iloc[0],
-                "Smiles" : data_sorted["Smiles"].iloc[0],
+                "name" : data_sorted["name"].iloc[0],
+                "smiles" : data_sorted["smiles"].iloc[0],
                 "pKa" : data_sorted["pka"].iloc[0],
                 "Nucleophilicity" : data_sorted["Nucleophilicity"].iloc[0]
             }
