@@ -11,11 +11,10 @@ authors = [
     { name="Raphaël Tisseyre", email="raphael.tisseyre@epfl.ch"}
 ]
 description = "A Python package for retrieving, organizing, and analyzing molecular properties from SMILES representations, using PubChem, RDKit, Pandas, and Morfeus."
-readme = "README.toml"
+readme = "README.md"
 requires-python = ">=3.10"
 classifiers = [
     "Development Status :: 4 - Beta",
-    "Intended Audience :: Chemist",
     "Programming Language :: Python :: 3.10"
 ]
 dependencies = [
@@ -23,12 +22,7 @@ dependencies = [
     "pandas",
     "numpy",
     "matplotlib",
-    "pathlib",
-    "requests",
-    "jason",
-    "regex",
-    "urllib",
-    "morfeus"
+    "morfeus-ml"
 ]
 
 [tool.hatch.build.targets.wheel]
