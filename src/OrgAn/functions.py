@@ -13,7 +13,7 @@ data : pd.DataFrame = pd.read_csv(datapath)
 
 
 
-def gives_data_frame(file : str) -> pd.DataFrame:
+def gives_data_frame(file : str) -> pd.DataFrame: # TODO: give a more "conventional" name
     """
     Take a list of smile from a file and return a dataframe 
     with proprieties of each molecule according to PubChem.
@@ -24,9 +24,7 @@ def gives_data_frame(file : str) -> pd.DataFrame:
     name, canonical smile, CAS, formula, mol weight,
     pKa, logP, formal charge and sterimol.
 
-    When no pKa is found from pubchem it is predicted with 
-    PypKa package.
-    Sterimol is calculated thanks to wSterimol package.
+    Sterimol is calculated using morfeus.
     """
 
     p = Path(".")
