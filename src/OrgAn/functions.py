@@ -4,7 +4,7 @@ import math as m
 from rdkit import Chem
 from pathlib import Path
 
-from pchem_rq import get_mol_info_from_smiles
+from OrgAn.pchem_rq import get_mol_info_from_smiles
 
 
 datapath = "data/data.csv"
