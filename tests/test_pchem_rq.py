@@ -1,11 +1,4 @@
-import os
-import sys
-current_dir = os.getcwd()
-target_dir_relative = os.path.join("src", "OrgAn")
-target_dir_absolute = os.path.abspath(os.path.join(current_dir, target_dir_relative))
-sys.path.append(target_dir_absolute)
-
-from pchem_rq import get_mol_info_from_smiles
+from OrgAn import get_mol_info_from_smiles
 
 butane = {
         "name": "butane", 
