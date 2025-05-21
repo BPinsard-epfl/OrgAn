@@ -1,4 +1,4 @@
-__all_ =["chromato", "functions", "pchem_rq"]
+__all__ =["chromato", "functions", "pchem_rq"]
 
 from . import chromato
 from . import functions
