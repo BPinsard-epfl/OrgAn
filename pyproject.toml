@@ -5,12 +5,31 @@ build-backend = "hatchling.build"
 [project]
 name = "ppchem-project" #change name
 version = "0.1"
+authors = [
+    { name="Bastien Pinsard", email="bastien.pinsard@epfl.ch"},
+    { name="Johan Schmidt", email="johan.schmidt@epfl.ch"},
+    { name="Raphaël Tisseyre", email="raphael.tisseyre@epfl.ch"}
+]
+description = "A Python package for retrieving, organizing, and analyzing molecular properties from SMILES representations, using PubChem, RDKit, Pandas, and Morfeus."
+readme = "README.toml"
+requires-python = ">=3.10"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Chemist",
+    "Programming Language :: Python :: 3.10"
+]
 dependencies = [
     "rdkit",
     "pandas",
+    "numpy",
+    "matplotlib",
+    "pathlib",
     "requests",
-    "regex"
+    "jason",
+    "regex",
+    "urllib",
+    "morfeus"
 ]
 
 [tool.hatch.build.targets.wheel]
-packages= ["src/ppchem-project"] #change name
+packages= ["src/OrgAn"]
