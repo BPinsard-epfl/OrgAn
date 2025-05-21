@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "ppchem-project" #change name
+name = "organ-chem" #change name
 version = "1.0.0"
 authors = [
     { name="Bastien Pinsard", email="bastien.pinsard@epfl.ch"},
