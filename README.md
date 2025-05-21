@@ -16,7 +16,7 @@
 OrgAn-main/
 ├── report.ipynb           # Main Jupyter notebook
 ├── data/                  # Folder for input CSV files
-├── src/                   # Python modules (functions, PubChem requests, chromatography)
+├── src/                   # Python modules (PubChem requests, functions, chromatography)
 │   ├── pchem_rq.py
 │   ├── functions.py
 │   └── chromato.py
