@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 
+from OrgAn.functions import gives_data_frame
 
 def get_elution_order(solutes: pd.DataFrame, is_reverse_phase : bool = False) -> pd.DataFrame:
   
@@ -69,22 +70,24 @@ def generate_chromatogram(solutes : pd.DataFrame, polarity_index : float, dead_t
     solutes["retention time"] = solutes["logP"].apply(lambda x : (estimate_retention_factor(x, polarity_index)+1)*dead_time)
 
     x_time = np.array([x/100 for x in range(round(solutes["retention time"].iloc[-1]*100)+100)])
-    y_signal = [0 for x in range(round(solutes["retention time"].iloc[-1]*100)+100)]
+    y_signal = np.array([0 for x in range(round(solutes["retention time"].iloc[-1]*100)+100)])
 
     index_df = 0
     index_array = 0
     while index_df<len(solutes):
-        if solutes[index_df]<x_time[index_array]:
-            index_array +=1
+        if solutes["retention time"].iloc[index_df]>x_time[index_array]:
+            index_array += 1
+            continue
         else :
-            if abs(solutes[index_df]-x_time[index_array])<abs(x_time[index_array]-x_time[index_array-1]):
+            if abs(solutes["retention time"].iloc[index_df]-x_time[index_array])<abs(x_time[index_array]-x_time[index_array-1]):
                 y_signal[index_array] = 1
                 index_df += 1
             else :
                 y_signal[index_array-1] = 1
                 index_df += 1
         index_array += 1
-    
+
+
     plt.plot(x_time, y_signal, "red", linewidth= 1.25, label= "Estimation")
     plt.xlabel("Time [min]")
     plt.ylabel("Signal")

@@ -80,8 +80,8 @@ OrgAn/
 Start by loading a molecular dataset from a CSV file containing SMILES strings.
 
 ```python
-from organ.functions import gives_data_frame, find_pKa_gaps, find_logp_gaps, find_compounds
-from organ.chromato import generate_chromatogram, calculate_polarity_index
+from OrgAn.functions import gives_data_frame, find_pKa_gaps, find_logp_gaps, find_compounds
+from OrgAn.chromato import generate_chromatogram, calculate_polarity_index
 
 # 1. Load dataset from SMILES
 # Reads a CSV file and returns a DataFrame of molecular properties
@@ -90,7 +90,7 @@ df = gives_data_frame("example_smiles.csv")
 # 2. Find largest property gaps
 # Returns the largest pKa and logP gaps in the dataset
 pka_gaps = find_pKa_gaps(df)
-logp_gaps = find_logp_gaps(df)
+logp_gaps = find_logp_gaps(df, 2)
 
 # 3. Filter compounds by property criteria
 # Retrieves the best matches for given pKa, logP, and charge values
