@@ -67,10 +67,10 @@ OrgAn/
 │   ├── test_functions.py  
 │   ├── test_pchem_rq.py  
 │   └── test_data.csv  
-├── example_smiles.csv     # Input example used in README  
-├── env.yml                # Conda environment (if used)  
+├── example_smiles.csv      
+├── env.yml                # Conda environment 
 ├── pyproject.toml         # Build and dependency config  
-└── LICENSE                # License file  
+└── LICENSE                 
 ```
 
 ---
