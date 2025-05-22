@@ -78,9 +78,9 @@ def find_pKa_gaps(df : pd.DataFrame, nb : int = 1) -> dict[float, tuple[int, int
 
     for i in range(len(sorted_df["pKa"])-1):
         for j in range(len(maxs)):
-            if maxs[j][0] < sorted_df["pKa"].iloc[i+1] - sorted_df["pKa"].iloc[i]: # how to treat two equal gaps?
+            if maxs[j][0] < round(float(sorted_df["pKa"].iloc[i+1] - sorted_df["pKa"].iloc[i]), 3): # how to treat two equal gaps?
                 if j+1 < nb: maxs[j+1:len(maxs)] = maxs[j:len(maxs)-1]
-                maxs[j] = (sorted_df["pKa"].iloc[i+1] - sorted_df["pKa"].iloc[i], (i, i+1))
+                maxs[j] = (round(float(sorted_df["pKa"].iloc[i+1] - sorted_df["pKa"].iloc[i]), 3), (i, i+1))
                 break
     
     maxs_dic : dict[float, tuple[int, int]] = {}
@@ -90,7 +90,7 @@ def find_pKa_gaps(df : pd.DataFrame, nb : int = 1) -> dict[float, tuple[int, int
     return maxs_dic
 
 
-def find_logp_gaps(df : pd.DataFrame, nb : int = 1) -> dict[float, tuple[int, int]]:
+def find_logp_gaps(df : pd.DataFrame, nb : int = 1) -> dict[float, tuple[int, int]]: # does not handle equal values very well
     """
     A function used to find the biggest logP gaps of a dataframe. 
     It will give by default the biggest gap, but one can precise how many he wants.
@@ -101,9 +101,10 @@ def find_logp_gaps(df : pd.DataFrame, nb : int = 1) -> dict[float, tuple[int, in
 
     for i in range(len(sorted_df["logP"])-1):
         for j in range(len(maxs)):
-            if maxs[j][0] < (sorted_df["logP"].iloc[i+1] - sorted_df["logP"].iloc[i]):
+            if maxs[j][0] < round(float(sorted_df["logP"].iloc[i+1] - sorted_df["logP"].iloc[i]), 3):
+                if round(float(sorted_df["logP"].iloc[i+1] - sorted_df["logP"].iloc[i]), 3) in [x[0] for x in maxs]: break # not ideal!
                 if j+1 < nb: maxs[j+1:len(maxs)] = maxs[j:len(maxs)-1]
-                maxs[j] = (sorted_df["logP"].iloc[i+1] - sorted_df["logP"].iloc[i], (i, i+1))
+                maxs[j] = (round(float(sorted_df["logP"].iloc[i+1] - sorted_df["logP"].iloc[i]), 3), (i, i+1))
                 break
     
     maxs_dic : dict[float, tuple[int, int]] = {}

@@ -13,11 +13,11 @@ assert find_pKa_gaps(df, 5) == {11.026: (1, 2), 4.1: (2, 3), 0.118: (0, 1)}, "fi
 assert find_pKa_gaps(df, 30) == {11.026: (1, 2), 4.1: (2, 3), 0.118: (0, 1)}, "find_pKa_gaps did not find the correct gaps"
 print("find_pKa_gaps passed all tests successfully")
 
-print(find_logp_gaps(df, 10))
-assert find_logp_gaps(df) == {2.8: (0, 1)}, "find_pKa_gaps did not find the correct gaps"
-assert find_logp_gaps(df, 2) == {2.8: (0, 1), 1.6: (6, 7)}, "find_pKa_gaps did not find the correct gaps"
-assert find_logp_gaps(df, 3) == {2.8: (0, 1), 1.6: (6, 7), 0.9: (5, 6)}, "find_pKa_gaps did not find the correct gaps"
-assert find_logp_gaps(df, 6) == {2.8: (0, 1), 1.6: (6, 7), 0.9: (5, 6), 0.4: (3, 4), 0.1: (1, 2), 0.0: (2, 3)}, "find_pKa_gaps did not find the correct gaps"
-assert find_logp_gaps(df, 30) == {2.8: (0, 1), 1.6: (6, 7), 0.9: (5, 6), 0.4: (3, 4), 0.1: (1, 2), 0.0: (2, 3)}, "find_pKa_gaps did not find the correct gaps"
+print(find_logp_gaps(df, 6))
+assert find_logp_gaps(df) == {2.8: (0, 1)}, "find_logp_gaps did not find the correct gaps"
+assert find_logp_gaps(df, 2) == {2.8: (0, 1), 1.6: (6, 7)}, "find_logp_gaps did not find the correct gaps"
+assert find_logp_gaps(df, 3) == {2.8: (0, 1), 1.6: (6, 7), 0.9: (5, 6)}, "find_logp_gaps did not find the correct gaps"
+assert find_logp_gaps(df, 6) == {2.8: (0, 1), 1.6: (6, 7), 0.9: (5, 6), 0.4: (3, 4), 0.1: (1, 2), 0.0: (2, 3)}, "find_logp_gaps did not find the correct gaps"
+assert find_logp_gaps(df, 30) == {2.8: (0, 1), 1.6: (6, 7), 0.9: (5, 6), 0.4: (3, 4), 0.1: (1, 2), 0.0: (2, 3)}, "find_logp_gaps did not find the correct gaps"
 print("find_logp_gaps passed all tests successfully")
 
