@@ -44,6 +44,8 @@ Or for developpers :
 pip install -e .
 ```
 
+---
+
 ## Project Structure
 
 ```
