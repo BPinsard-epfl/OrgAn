@@ -95,19 +95,6 @@ generate_chromatogram(candidates, pi)
 
 ---
 
-## Input Format
-
-You must provide a `.csv` file with a `smiles` column like the example below:
-
-```
-smiles
-CCO
-c1ccccc1
-CC(=O)O
-```
-
----
-
 ## Authors
 
 - Raphaël Tisseyre  
