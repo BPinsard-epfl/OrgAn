@@ -6,10 +6,9 @@ from pathlib import Path
 
 from OrgAn import get_mol_info_from_smiles
 
-
-datapath = "OrgAn/data/data.csv"
+p_data = Path(".")
+datapath = p_data / "data" / "data.csv"
 data : pd.DataFrame = pd.read_csv(datapath)
-
 
 
 def gives_data_frame(file : str) -> pd.DataFrame: # TODO: give a more "conventional" name
@@ -175,7 +174,3 @@ def find_compounds(pKa : float = m.inf, logP : float = m.inf, charge : int = 100
         print("No compound found")    
     
     return data_sorted.head()
-    
-def test(col):
-    print(col)
-    return col
