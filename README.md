@@ -21,7 +21,7 @@ OrgAn allows you to:
 
 Follow these steps to correctly set up your development environment before running the app.
 
-### Step 0 — Clone this GitHub repository
+### 0. Clone this GitHub repository
 
 Start by cloning the project to your local machine:
 
@@ -30,19 +30,19 @@ git clone https://github.com/BPinsard-epfl/OrgAn.git
 cd OrgAn
 ```
 
-### Step 1 — Install Python 3.10
+### 1. Install Python 3.10
 
 This project requires **Python 3.10**. Download it here:  
 [https://www.python.org/downloads/release/python-3100/](https://www.python.org/downloads/release/python-3100/)
 
-### Step 2 — Install Conda
+### 2. Install Conda
 
 If you haven’t installed Conda yet, choose one of the following:
 
 - **Miniconda (recommended)**: [https://docs.conda.io/en/latest/miniconda.html](https://docs.conda.io/en/latest/miniconda.html)
 - or **Anaconda**: [https://www.anaconda.com/products/distribution](https://www.anaconda.com/products/distribution)
 
-### Step 3 — Create the development environment
+### 3. Create the development environment
 
 You have two options:
 
