@@ -7,7 +7,7 @@ from pathlib import Path
 from OrgAn import get_mol_info_from_smiles
 
 
-datapath = "data/data.csv"
+datapath = "OrgAn/data/data.csv"
 data : pd.DataFrame = pd.read_csv(datapath)
 
 
@@ -91,7 +91,7 @@ def find_pKa_gaps(df : pd.DataFrame, nb : int = 1) -> dict[float, tuple[int, int
     return maxs_dic
 
 
-def find_logp_gaps(df : pd.DataFrame, nb : int = 1) -> dict[float, tuple[int, int]]: # does not handle equal values very well
+def find_logp_gaps(df : pd.DataFrame, nb : int = 1) -> list[float, tuple[int, int]]: # does not handle equal values very well
     """
     A function used to find the biggest logP gaps of a dataframe. 
     It will give by default the biggest gap, but one can precise how many he wants.
@@ -107,15 +107,15 @@ def find_logp_gaps(df : pd.DataFrame, nb : int = 1) -> dict[float, tuple[int, in
                 maxs[j] = (round(float(sorted_df["logP"].iloc[i+1] - sorted_df["logP"].iloc[i]), 3), (i, i+1))
                 break
     
-    maxs_dic : list[tuple[float, tuple[int, int]]] = []
+    maxs_list : list[tuple[float, tuple[int, int]]] = []
     for i in range(len(maxs)):
         if maxs[i][1] == (0, 0): break
-        maxs_dic.append(maxs[i])
+        maxs_list.append(maxs[i])
     
-    return maxs_dic
+    return maxs_list
  
 
-def find_compounds(pka : float = m.inf, logP : float = m.inf, charge : int = 100,
+def find_compounds(pKa : float = m.inf, logP : float = m.inf, charge : int = 100,
                    sterimol : dict[str, float] = {}, smiles : str = "") -> pd.DataFrame:
     """
     Gives a specific acid based on Smiles, pka, Nucleophilicity, ...
@@ -168,8 +168,8 @@ def find_compounds(pka : float = m.inf, logP : float = m.inf, charge : int = 100
         data_sorted.query("`logP`<=logP+1.5 and `logP`>=logP-1.5")
         data_sorted.sort_values(by="logP", key = lambda col : abs(col-logP), inplace=True)
 
-    if pka != m.inf:
-        data_sorted.sort_values(by="pKa", key = lambda col : abs(col-pka), inplace=True)
+    if pKa != m.inf:
+        data_sorted.sort_values(by="pKa", key = lambda col : abs(col-pKa), inplace=True)
     
     if data_sorted.dropna().empty:
         print("No compound found")    
