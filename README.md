@@ -62,8 +62,6 @@ OrgAn/
 
 ---
 
----
-
 ## Usage
 
 Start by loading a molecular dataset from a CSV file containing SMILES strings.
