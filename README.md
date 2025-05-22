@@ -1,6 +1,7 @@
 # OrgAn – Molecular Analysis and Chromatographic Simulation
 
-**OrgAn** is a Python-based tool for analyzing molecular properties and simulating chromatographic behavior. It is built to process SMILES data, fetch molecular descriptors, and generate both quantitative comparisons and visual analyses.
+**OrgAn** is a Python tool designed to analyze molecular structures from SMILES, extract key chemical properties, and simulate their separation in chromatography.
+It allows for structured comparison between compounds and provides clear visual outputs of the results.
 
 ---
 
@@ -8,10 +9,10 @@
 
 OrgAn allows you to:
 
-- Extract molecular descriptors (logP, pKa, molecular weight, etc.) from public sources like PubChem
+- Extract chemical properties (logP, pKa, molecular weight, etc.) from public sources like PubChem
 - Build structured molecular datasets from CSV input
-- Identify gaps in descriptors across compound sets
-- Suggest molecules based on custom physicochemical criteria
+- Identify gaps between chemical characteristics across compound sets
+- Suggest molecules based on custom chemical criteria
 - Simulate chromatographic retention behavior
 - Retrieve and process molecular structures for analysis
 
@@ -50,26 +51,22 @@ pip install -e .
 
 ```
 OrgAn/
-├── README.md              # Project overview and usage instructions  
-├── report/                # Notebook and report data  
-│   ├── report.ipynb       # Documentation and usage examples  
-│   └── data_example.csv   # Example dataset for the report  
-├── data/                  # Input CSV files  
-│   └── data.csv  
-├── src/                   # Core logic and modules  
-│   └── OrgAn/             # Main package directory  
-│       ├── __init__.py  
-│       ├── chromato.py    # Chromatography-related functions  
-│       ├── functions.py   # Data processing and analysis  
-│       └── pchem_rq.py    # Physicochemical descriptors  
-├── tests/                 # Unit tests  
-│   ├── test_chromato.py  
-│   ├── test_functions.py  
-│   ├── test_pchem_rq.py  
-│   └── test_data.csv  
-├── example_smiles.csv      
-├── env.yml                # Conda environment 
-├── pyproject.toml         # Build and dependency config  
+├── data/
+│   └── data.csv                 
+├── docs/
+│   └── chromato_example.png     # Example chromatogram for the README
+├── report/
+│   └── report.ipynb             # Project notebook with detailed analysis
+├── src/
+│   └── OrgAn/
+│       ├── chromato.py          # Chromatography simulation functions
+│       ├── functions.py         # Main logic for filtering and gap analysis
+│       └── pchem_rq.py          # Retrieves molecular data from PubChem
+├── tests/                       
+├── example_smiles.csv           
+├── env.yml
+├── pyproject.toml
+├── README.md
 └── LICENSE                 
 ```
 
