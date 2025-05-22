@@ -62,45 +62,35 @@ OrgAn/
 
 ---
 
+---
+
 ## Usage
 
-Once installed, you can use OrgAn through Python scripts.
-
-### Core Function Usage
-
-Here are some of the key functions and how to use them:
-
-#### `gives_data_frame(path: str) -> pd.DataFrame`
-Loads a `.csv` file containing a column `smiles`, retrieves descriptors (logP, pKa, MolWeight, etc.) for each molecule, and returns a DataFrame.
+Start by loading a molecular dataset from a CSV file containing SMILES strings.
 
 ```python
-from OrgAn import gives_data_frame
-df = gives_data_frame("data/example_smiles.csv")
-```
+from organ.functions import gives_data_frame, find_pKa_gaps, find_logp_gaps, find_compounds
+from organ.chromato import generate_chromatogram, calculate_polarity_index
 
-#### `logp_gap(df: pd.DataFrame, threshold: float = 0.5) -> pd.DataFrame`
-Identifies gaps in logP values across a compound set. Useful for optimizing compound diversity.
+# 1. Load dataset from SMILES
+# Reads a CSV file and returns a DataFrame of molecular properties
+df = gives_data_frame("example_smiles.csv")
 
-```python
-from src.chromato import logp_gap
-gaps = logp_gap(df)
-```
+# 2. Find largest property gaps
+# Returns the largest pKa and logP gaps in the dataset
+pka_gaps = find_pKa_gaps(df)
+logp_gaps = find_logp_gaps(df)
 
-#### `plot_gaps(df: pd.DataFrame)`
-Displays a chromatographic-style plot that highlights the logP gaps between molecules.  
-This helps visualize the separation potential of a compound set and supports chromatographic simulation.
+# 3. Filter compounds by property criteria
+# Retrieves the best matches for given pKa, logP, and charge values
+candidates = find_compounds(pKa=4.5, logP=2.0, charge=0)
 
-```python
-from src.chromato import plot_gaps
-plot_gaps(df)
-```
+# 4. Simulate a chromatogram
+# Generates a chromatogram using estimated retention times
+# Define solvent composition (fractions must sum to 1.0)
+pi = calculate_polarity_index(water=0.5, meoh=0.5)
 
-#### `find_compound(logp: float, pka: float)`
-Returns compound suggestions based on a desired logP and pKa.
-
-```python
-from src.functions import find_compound
-suggested = find_compound(logp=2.5, pka=4.8)
+generate_chromatogram(candidates, pi)
 ```
 
 ---
