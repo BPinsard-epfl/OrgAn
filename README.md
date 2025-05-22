@@ -72,7 +72,7 @@ conda activate ppc_env
 pip install streamlit streamlit_ketcher attrs==25.3.0 certifi==2025.4.26 charset-normalizer==3.4.1 exceptiongroup==1.2.2 h11==0.16.0 html5lib==1.1 idna==3.10 mechanize==0.4.10 numpy==2.2.5 outcome==1.3.0.post0 pandas==2.2.3 pillow==11.2.1 pubchempy==1.0.4 pysocks==1.7.1 python-dateutil==2.9.0.post0 pytz==2025.2 rdkit==2024.9.6 regex==2024.11.6 requests==2.32.3 selenium==4.31.0 six==1.17.0 sniffio==1.3.1 sortedcontainers==2.4.0 trio==0.30.0 trio-websocket==0.12.2 typing-extensions==4.13.2 tzdata==2025.2 urllib3==2.4.0 webencodings==0.5.1 websocket-client==1.8.0 wsproto==1.2.0
 ```
 
-### Step 4 — Run the application
+### 4. Run the application
 
 To start the app, run the following command in the project directory:
 
