@@ -104,6 +104,18 @@ pi = calculate_polarity_index(water=0.5, meoh=0.5)
 generate_chromatogram(candidates, pi)
 ```
 
+## Example output (Polarity Index = 11)
+
+This chromatogram was generated using the following molecules:
+
+- CCO  
+- CCC(=O)O  
+- O=C(O)C=CC(=O)O
+
+with a polarity index of 11.
+
+![Simulated Chromatogram](docs/chromato_example.png)
+
 ---
 
 ## Authors
