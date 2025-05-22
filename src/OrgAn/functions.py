@@ -6,8 +6,8 @@ from pathlib import Path
 
 from OrgAn import get_mol_info_from_smiles
 
-p_data = Path(".")
-datapath = p_data / "data" / "data.csv"
+
+datapath = "data/data.csv"
 data : pd.DataFrame = pd.read_csv(datapath)
 
 
