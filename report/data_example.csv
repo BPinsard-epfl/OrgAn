@@ -1,9 +1,6 @@
-name,cid,CAS,smiles,molWeight,molFormula,logP,pKa,charge,sterimol_L,sterimol_B1,sterimol_B5
-Propionic Acid,1032,79-09-4,CCC(=O)O,74.08,C3H6O2,0.3,4.874,0,5.49,1.74,3.61
-Ethanol,702,64-17-5,CCO,46.07,C2H6O,-0.1,15.9,0,4.51,1.7,3.26
-Acetic Acid,176,64-19-7,CC(=O)O,60.05,C2H4O2,-0.2,4.756,0,4.48,1.7,3.22
-Acetone,180,67-64-1,CC(C)=O,58.08,C3H6O,-0.1,20.0,0,4.15,1.99,3.24
-DL-alanine,602,302-72-7,CC(N)C(=O)O,89.09,C3H7NO2,-3.0,,0,5.3,1.7,4.52
-acetylene,6326,74-86-2,C#C,26.04,C2H2,0.4,,0,3.77,1.7,1.7
-butane,7843,106-97-8,CCCC,58.12,C4H10,2.9,,0,4.68,1.99,3.26
-furan,8029,110-00-9,c1ccoc1,68.07,C4H4O,1.3,,0,4.38,1.7,4.31
+smiles
+CCC(=O)O
+Cn1c(=O)c2c(ncn2C)n(C)c1=O
+CC(=O)O
+O=C([O-])[O-]
+CN(C)CCOC(c1ccccc1)c1ccccc1
