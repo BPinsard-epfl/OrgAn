@@ -112,7 +112,7 @@ This chromatogram was generated using the following molecules:
 - CCC(=O)O  
 - O=C(O)C=CC(=O)O
 
-with a polarity index of 11.
+with a polarity index of 10.2 and a dead time of 2 minutes.
 
 ![Simulated Chromatogram](docs/chromato_example.png)
 
