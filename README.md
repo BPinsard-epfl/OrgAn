@@ -50,16 +50,27 @@ pip install -e .
 
 ```
 OrgAn/
-├── report.ipynb           # Documentation and usage examples
-├── data/                  # Input CSV files
-├── src/                   # Core logic and modules
-│   ├── pchem_rq.py
-│   ├── functions.py
-│   └── chromato.py
-├── app.py                 # Streamlit web app
-├── tests/                 # Unit tests
-├── pyproject.toml         # Build config
-└── LICENSE
+├── README.md              # Project overview and usage instructions  
+├── report/                # Notebook and report data  
+│   ├── report.ipynb       # Documentation and usage examples  
+│   └── data_example.csv   # Example dataset for the report  
+├── data/                  # Input CSV files  
+│   └── data.csv  
+├── src/                   # Core logic and modules  
+│   └── OrgAn/             # Main package directory  
+│       ├── __init__.py  
+│       ├── chromato.py    # Chromatography-related functions  
+│       ├── functions.py   # Data processing and analysis  
+│       └── pchem_rq.py    # Physicochemical descriptors  
+├── tests/                 # Unit tests  
+│   ├── test_chromato.py  
+│   ├── test_functions.py  
+│   ├── test_pchem_rq.py  
+│   └── test_data.csv  
+├── example_smiles.csv     # Input example used in README  
+├── env.yml                # Conda environment (if used)  
+├── pyproject.toml         # Build and dependency config  
+└── LICENSE                # License file  
 ```
 
 ---
