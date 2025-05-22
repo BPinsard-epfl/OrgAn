@@ -2,17 +2,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 
-from OrgAn.functions import gives_data_frame
-
 def get_elution_order(solutes: pd.DataFrame, is_reverse_phase : bool = False) -> pd.DataFrame:
   
     solutes = solutes.sort_values("logP", ascending=is_reverse_phase).reset_index(drop=True)
     return solutes
-
-
-def estimate_retention_factor(logP : float , polarity_index : float) -> float:
-    logk = logP - 0.5 * (10.2 - polarity_index)
-    return 10 ** logk
 
 
 def calculate_polarity_index( # is it better to use abbreviations or the full name of the solvents for the arguments?
@@ -63,6 +56,11 @@ def calculate_polarity_index( # is it better to use abbreviations or the full na
     if cyclohex + n_hex + ccl4 + ipr_ether + toluene + et2o + thf + etoh + etoac + dioxane + meoh + mecn + water != 1:
         raise ValueError("The total of the volume fractions must be equal to 1")
     return 0.04 * cyclohex + 0.1 * n_hex + 1.6 * ccl4 + 2.4 * ipr_ether + 2.4 * toluene + 2.8 * et2o + 4.0 * thf + 4.3 * etoh + 4.4 * etoac + 4.8 * dioxane + 5.1 * meoh + 5.8 * mecn + 10.2 * water
+
+
+def estimate_retention_factor(logP : float , polarity_index : float) -> float:
+    logk = logP - 0.5 * (10.2 - polarity_index)
+    return 10 ** logk
 
 
 def generate_chromatogram(solutes : pd.DataFrame, polarity_index : float, dead_time : float = 1, savefigas : str = "") -> None:
