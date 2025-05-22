@@ -21,6 +21,8 @@ dependencies = [
     "rdkit",
     "pandas",
     "numpy",
+    "requests",
+    "regex",
     "matplotlib",
     "morfeus-ml"
 ]

@@ -136,9 +136,17 @@ def find_compounds(pka : float = m.inf, logP : float = m.inf, charge : int = 100
         if not data_sorted.empty:
             properties : dict[str, str|float] = {
                 "name" : data_sorted["name"].iloc[0],
+                "cid" : data_sorted["cid"].iloc[0],
+                "CAS" : data_sorted["CAS"].iloc[0],
                 "smiles" : data_sorted["smiles"].iloc[0],
+                "molWeight" : data_sorted["molWeight"].iloc[0],
+                "molFormula" : data_sorted["molFormula"].iloc[0],
+                "logP" : data_sorted["logP"].iloc[0],
                 "pKa" : data_sorted["pKa"].iloc[0],
-                "logP" : data_sorted["logP"].iloc[0]
+                "charge" : data_sorted["charge"].iloc[0],
+                "sterimol_L": data_sorted["sterimol_L"].iloc[0],
+                "sterimol_B1": data_sorted["sterimol_B1"].iloc[0],
+                "sterimol_B5": data_sorted["sterimol_B5"].iloc[0]
             }
             return pd.DataFrame([properties])
         else: 
