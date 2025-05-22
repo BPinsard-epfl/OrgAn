@@ -159,13 +159,13 @@ def find_compounds(pka : float = m.inf, logP : float = m.inf, charge : int = 100
     #Poly values return
 
     if sterimol:  
-        data_sorted.query("`sterimol_L`<=sterimol['L']+3 and `sterimol_L`>=sterimol['L']-3")
-        data_sorted.query("`sterimol_B1`<=sterimol['B1']+3 and `sterimol_B1`>=sterimol['B1']-3")
-        data_sorted.query("`sterimol_B5`<=sterimol['B5']+3 and `sterimol_B5`>=sterimol['B5']-3")
-        data_sorted.sort_values(by=["sterimol_L", "sterimol_B1", "sterimol_B5"], key = lambda col : abs(col-sterimol[col.index.split("_", 1)[1]]), inplace=True)
+        data_sorted.query("`sterimol_L`<=@sterimol['L']+3 and `sterimol_L`>=@sterimol['L']-3", inplace=True)
+        data_sorted.query("`sterimol_B1`<=@sterimol['B1']+3 and `sterimol_B1`>=@sterimol['B1']-3", inplace=True)
+        data_sorted.query("`sterimol_B5`<=@sterimol['B5']+3 and `sterimol_B5`>=@sterimol['B5']-3", inplace=True)
+        data_sorted.sort_values(by=["sterimol_L", "sterimol_B1", "sterimol_B5"], key = lambda col : abs(col-sterimol[col.name.split("_", 1)[1]]), inplace=True)
 
     if logP != m.inf:
-        data_sorted.query("`logP`<=logP+1.5 and `logP`>=logP-1.5")
+        data_sorted.query("`logP`<=@logP+1.5 and `logP`>=@logP-1.5", inplace=True)
         data_sorted.sort_values(by="logP", key = lambda col : abs(col-logP), inplace=True)
 
     if pka != m.inf:
@@ -176,4 +176,6 @@ def find_compounds(pka : float = m.inf, logP : float = m.inf, charge : int = 100
     
     return data_sorted.head()
     
-    
+def test(col):
+    print(col)
+    return col
