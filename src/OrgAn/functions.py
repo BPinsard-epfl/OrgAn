@@ -78,14 +78,15 @@ def find_pKa_gaps(df : pd.DataFrame, nb : int = 1) -> dict[float, tuple[int, int
 
     for i in range(len(sorted_df["pKa"])-1):
         for j in range(len(maxs)):
-            if maxs[j][0] < round(float(sorted_df["pKa"].iloc[i+1] - sorted_df["pKa"].iloc[i]), 3): # how to treat two equal gaps?
+            if maxs[j][0] < round(float(sorted_df["pKa"].iloc[i+1] - sorted_df["pKa"].iloc[i]), 3):
                 if j+1 < nb: maxs[j+1:len(maxs)] = maxs[j:len(maxs)-1]
                 maxs[j] = (round(float(sorted_df["pKa"].iloc[i+1] - sorted_df["pKa"].iloc[i]), 3), (i, i+1))
                 break
     
-    maxs_dic : dict[float, tuple[int, int]] = {}
+    maxs_dic : list[tuple[float, tuple[int, int]]] = []
     for i in range(len(maxs)):
-        if maxs[i][1] != (0, 0): maxs_dic[round(float(maxs[i][0]), 3)] = maxs[i][1]
+        if maxs[i][1] == (0, 0): break
+        maxs_dic.append(maxs[i])
     
     return maxs_dic
 
@@ -101,15 +102,15 @@ def find_logp_gaps(df : pd.DataFrame, nb : int = 1) -> dict[float, tuple[int, in
 
     for i in range(len(sorted_df["logP"])-1):
         for j in range(len(maxs)):
-            if maxs[j][0] < round(float(sorted_df["logP"].iloc[i+1] - sorted_df["logP"].iloc[i]), 3):
-                if round(float(sorted_df["logP"].iloc[i+1] - sorted_df["logP"].iloc[i]), 3) in [x[0] for x in maxs]: break # not ideal!
+            if maxs[j][0] <= round(float(sorted_df["logP"].iloc[i+1] - sorted_df["logP"].iloc[i]), 3):
                 if j+1 < nb: maxs[j+1:len(maxs)] = maxs[j:len(maxs)-1]
                 maxs[j] = (round(float(sorted_df["logP"].iloc[i+1] - sorted_df["logP"].iloc[i]), 3), (i, i+1))
                 break
     
-    maxs_dic : dict[float, tuple[int, int]] = {}
+    maxs_dic : list[tuple[float, tuple[int, int]]] = []
     for i in range(len(maxs)):
-        if maxs[i][1] != (0, 0): maxs_dic[round(float(maxs[i][0]), 3)] = maxs[i][1]
+        if maxs[i][1] == (0, 0): break
+        maxs_dic.append(maxs[i])
     
     return maxs_dic
  
@@ -136,12 +137,12 @@ def find_compounds(pka : float = m.inf, logP : float = m.inf, charge : int = 100
             properties : dict[str, str|float] = {
                 "name" : data_sorted["name"].iloc[0],
                 "smiles" : data_sorted["smiles"].iloc[0],
-                "pKa" : data_sorted["pka"].iloc[0],
-                "Nucleophilicity" : data_sorted["Nucleophilicity"].iloc[0]
+                "pKa" : data_sorted["pKa"].iloc[0],
+                "logP" : data_sorted["logP"].iloc[0]
             }
-            return pd.DataFrame(properties)
+            return pd.DataFrame([properties])
         else: 
-            return pd.DataFrame(get_mol_info_from_smiles(smiles))
+            return pd.DataFrame([get_mol_info_from_smiles(smiles)])
 
     
     if charge != 100:
