@@ -19,68 +19,30 @@ OrgAn allows you to:
 
 ## Installation
 
-Follow these steps to correctly set up your development environment before running the app.
+OrgAn relies on Numpy, Pandas, RDKit, Morfeus, Requests, Regex, Matplotlib
 
-### 0. Clone this GitHub repository
+A virtual environment with Python 3.10 can be installed with Anaconda as follows:
 
-Start by cloning the project to your local machine:
+```
+conda create -n organ python=3.10
+conda activate organ
+```
 
+#### Installing from source
+
+The first step is to clone the represitory in your local device:
 ```bash
 git clone https://github.com/BPinsard-epfl/OrgAn.git
 cd OrgAn
 ```
-
-### 1. Install Python 3.10
-
-This project requires **Python 3.10**. Download it here:  
-[https://www.python.org/downloads/release/python-3100/](https://www.python.org/downloads/release/python-3100/)
-
-### 2. Install Conda
-
-If you haven’t installed Conda yet, choose one of the following:
-
-- **Miniconda (recommended)**: [https://docs.conda.io/en/latest/miniconda.html](https://docs.conda.io/en/latest/miniconda.html)
-- or **Anaconda**: [https://www.anaconda.com/products/distribution](https://www.anaconda.com/products/distribution)
-
-### 3. Create the development environment
-
-You have two options:
-
-#### Option 1 — Using the `env.yml` file (recommended)
-
-1. Run the following commands from the project directory:
-
-```bash
-conda env create -f env.yml
-conda activate ppchem_project
+For simple user :
 ```
-
-> This will ensure all required packages and compatible versions are installed.
-
-#### Option 2 — Manual setup with `pip`
-
-1. Create a new Conda environment with Python 3.10:
-
-```bash
-conda create -n ppc_env python=3.10
-conda activate ppc_env
+pip install .
 ```
-
-2. Install required packages:
-
-```bash
-pip install streamlit streamlit_ketcher attrs==25.3.0 certifi==2025.4.26 charset-normalizer==3.4.1 exceptiongroup==1.2.2 h11==0.16.0 html5lib==1.1 idna==3.10 mechanize==0.4.10 numpy==2.2.5 outcome==1.3.0.post0 pandas==2.2.3 pillow==11.2.1 pubchempy==1.0.4 pysocks==1.7.1 python-dateutil==2.9.0.post0 pytz==2025.2 rdkit==2024.9.6 regex==2024.11.6 requests==2.32.3 selenium==4.31.0 six==1.17.0 sniffio==1.3.1 sortedcontainers==2.4.0 trio==0.30.0 trio-websocket==0.12.2 typing-extensions==4.13.2 tzdata==2025.2 urllib3==2.4.0 webencodings==0.5.1 websocket-client==1.8.0 wsproto==1.2.0
+Or for developpers :
 ```
-
-### 4. Run the application
-
-To start the app, run the following command in the project directory:
-
-```bash
-streamlit run app.py
+pip install -e .
 ```
-
----
 
 ## Project Structure
 
@@ -109,10 +71,10 @@ Once installed, you can use OrgAn through Python scripts.
 Here are some of the key functions and how to use them:
 
 #### `gives_data_frame(path: str) -> pd.DataFrame`
-Loads a `.csv` file containing a column `smiles`, retrieves descriptors (logP, pKa, MW, etc.) for each molecule, and returns a DataFrame.
+Loads a `.csv` file containing a column `smiles`, retrieves descriptors (logP, pKa, MolWeight, etc.) for each molecule, and returns a DataFrame.
 
 ```python
-from src.functions import gives_data_frame
+from OrgAn import gives_data_frame
 df = gives_data_frame("data/example_smiles.csv")
 ```
 
@@ -145,7 +107,7 @@ suggested = find_compound(logp=2.5, pka=4.8)
 
 ## Input Format
 
-You must provide a `.csv` file with a `smiles` column:
+You must provide a `.csv` file with a `smiles` column like the example below:
 
 ```
 smiles
