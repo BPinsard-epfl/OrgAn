@@ -73,18 +73,19 @@ def find_pKa_gaps(df : pd.DataFrame, nb : int = 1) -> dict[float, tuple[int, int
     It will give by default the biggest gap, but one can precise how many he wants.
     """
 
-    sorted_df = df.sort_values(by='pKa')
-    maxs : list[tuple[float, tuple[int, int]]] = [(0,(0,0)) for j in range(nb)]
+    sorted_df = df.sort_values(by='pKa').reset_index(drop=True)
+    maxs : list[tuple[float, tuple[int, int]]] = [(-1,(0,0)) for j in range(nb)]
 
     for i in range(len(sorted_df["pKa"])-1):
         for j in range(len(maxs)):
-            if maxs[j] < sorted_df["pKa"].iloc(i) - sorted_df["pKa"].iloc(i+1):
-                maxs[j] = (sorted_df["pKa"].iloc(i) - sorted_df["pKa"].iloc(i+1), (i, i+1))
+            if maxs[j][0] < sorted_df["pKa"].iloc[i+1] - sorted_df["pKa"].iloc[i]: # how to treat two equal gaps?
+                if j+1 < nb: maxs[j+1:len(maxs)] = maxs[j:len(maxs)-1]
+                maxs[j] = (sorted_df["pKa"].iloc[i+1] - sorted_df["pKa"].iloc[i], (i, i+1))
                 break
     
-    maxs_dic : dict[float, tuple[int, int]]
+    maxs_dic : dict[float, tuple[int, int]] = {}
     for i in range(len(maxs)):
-        maxs_dic[maxs[i][0]] = maxs[i][1]
+        if maxs[i][1] != (0, 0): maxs_dic[round(float(maxs[i][0]), 3)] = maxs[i][1]
     
     return maxs_dic
 
@@ -95,18 +96,19 @@ def find_logp_gaps(df : pd.DataFrame, nb : int = 1) -> dict[float, tuple[int, in
     It will give by default the biggest gap, but one can precise how many he wants.
     """
 
-    sorted_df = df.sort_values(by='logP')
-    maxs : list[tuple[float, tuple[int, int]]] = [(0,(0,0)) for x in range(nb)]
+    sorted_df = df.sort_values(by='logP').reset_index(drop=True)
+    maxs : list[tuple[float, tuple[int, int]]] = [(-1,(0,0)) for x in range(nb)]
 
     for i in range(len(sorted_df["logP"])-1):
         for j in range(len(maxs)):
-            if maxs[j] < (sorted_df["logP"].iloc(i) - sorted_df["logP"].iloc(i+1)):
-                maxs[j] = (sorted_df["logP"].iloc(i) - sorted_df["logP"].iloc(i+1), (i, i+1))
+            if maxs[j][0] < (sorted_df["logP"].iloc[i+1] - sorted_df["logP"].iloc[i]):
+                if j+1 < nb: maxs[j+1:len(maxs)] = maxs[j:len(maxs)-1]
+                maxs[j] = (sorted_df["logP"].iloc[i+1] - sorted_df["logP"].iloc[i], (i, i+1))
                 break
     
-    maxs_dic : dict[float, tuple[int, int]]
+    maxs_dic : dict[float, tuple[int, int]] = {}
     for i in range(len(maxs)):
-        maxs_dic[maxs[i][0]] = maxs[i][1]
+        if maxs[i][1] != (0, 0): maxs_dic[round(float(maxs[i][0]), 3)] = maxs[i][1]
     
     return maxs_dic
  
