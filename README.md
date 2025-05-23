@@ -57,12 +57,19 @@ OrgAn/
 │   └── chromato_example.png     # Example chromatogram for the README
 ├── report/
 │   └── report.ipynb             # Project notebook with detailed analysis
+│   └── data_example.csv
 ├── src/
 │   └── OrgAn/
+│       ├── __init__.py
 │       ├── chromato.py          # Chromatography simulation functions
 │       ├── functions.py         # Main logic for filtering and gap analysis
 │       └── pchem_rq.py          # Retrieves molecular data from PubChem
-├── tests/                                 
+├── tests/
+│       ├── test_chromato.py     # Test file for chromato module
+│       ├── test_data.csv
+│       ├── test_functions.py    # Test file for functions module
+│       ├── test_pchem_rq.py     # Test file for pchem_rq module
+│       └── test_smiles.csv          
 ├── pyproject.toml
 ├── README.md
 └── LICENSE                 
