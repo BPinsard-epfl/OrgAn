@@ -62,8 +62,7 @@ OrgAn/
 │       ├── chromato.py          # Chromatography simulation functions
 │       ├── functions.py         # Main logic for filtering and gap analysis
 │       └── pchem_rq.py          # Retrieves molecular data from PubChem
-├── tests/                       
-├── example_smiles.csv           
+├── tests/                                 
 ├── env.yml
 ├── pyproject.toml
 ├── README.md
