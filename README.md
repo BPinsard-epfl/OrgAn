@@ -22,7 +22,7 @@ OrgAn allows you to:
 
 OrgAn relies on Numpy, Pandas, RDKit, Morfeus, Requests, Regex, Matplotlib
 
-A virtual environment with Python 3.10 can be installed with Anaconda as follows:
+A virtual environment with Python 3.10 can be installed with Anaconda in your terminal as follows:
 
 ```
 conda create -n organ python=3.10
@@ -37,11 +37,11 @@ git clone https://github.com/BPinsard-epfl/OrgAn.git
 cd OrgAn
 ```
 For simple user :
-```
+```bash
 pip install .
 ```
 Or for developpers :
-```
+```bash
 pip install -e .
 ```
 
