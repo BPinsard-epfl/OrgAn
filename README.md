@@ -63,7 +63,6 @@ OrgAn/
 │       ├── functions.py         # Main logic for filtering and gap analysis
 │       └── pchem_rq.py          # Retrieves molecular data from PubChem
 ├── tests/                                 
-├── env.yml
 ├── pyproject.toml
 ├── README.md
 └── LICENSE                 
